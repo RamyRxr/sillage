@@ -26,7 +26,7 @@ A perfume house site where **the bottle is revealed by light**: a single sweep o
 
 ### What it does *not* prove
 
-State management, data modelling, architecture, APIs, auth. This is a **craft** piece, not a **systems** piece. It complements a project like FireTrack; it does not replace the need for one.
+Data modelling, architecture, APIs, auth. This is a **craft** piece, not a **systems** piece. It complements a project like FireTrack; it does not replace the need for one. (The invitation form and the small UI store exercise forms, validation and client state at a small scale. That is practice with the tools, not a claim about systems design.)
 
 ### The honest risk
 
@@ -74,7 +74,7 @@ The name is the concept. A perfume is not a smell, it's a trace. And the bottle 
 **Pull quote (used on `/maison`):**
 > "We did not make a perfume to be noticed. We made one to be remembered."
 
-**CTA:** `Request an invitation` — no cart, no checkout, no fake prices. It's a maison, not a shop. (Clicking it opens a small panel explaining it's a concept piece — honest and in-brand.)
+**CTA:** `Request an invitation` — no cart, no checkout, no fake prices. It's a maison, not a shop. (Clicking it opens a small panel with a short request form: name, email, preferred note. The panel says plainly that this is a concept piece and that nothing is sent or stored — honest and in-brand. The form copy is written and approved in Milestone 2b.)
 
 ---
 
@@ -87,7 +87,7 @@ No photography. The bottle is a **hand-drawn SVG silhouette**. Everything else i
 Why:
 - Removes the single biggest execution risk (bad assets) and the entire licensing question.
 - It is *more* original than an image-led perfume site, not less.
-- Ships at ~150KB total. Loads instantly. Feels expensive precisely because it's quiet.
+- Stays light: no image files, and the JS budget (§9) caps the biggest part. Loads instantly. Feels expensive precisely because it's quiet.
 - A silhouette + light is a stronger concept than a photo: the bottle is never fully shown, so the imagination fills it in.
 
 ### Direction B — **Self-shot photography** (fallback / phase 2)
@@ -105,6 +105,8 @@ Only if Direction A is finished and deployed. Cheap rectangular bottle, black ba
 | `--ash` | `#6E6A64` | Secondary text, hairlines. |
 | `--light` | `#F7F2E9` | The sweep only. Never used for text. |
 | `--glass` | `#7E8F8C` | Single cold accent. Caustics only. |
+
+In code these tokens live in Tailwind's `@theme` block (`src/styles/tokens.css`) as `--color-ink`, `--color-bone`, `--color-ash`, `--color-light` and `--color-glass`, so utilities such as `bg-ink` and `text-bone` exist. Tailwind's default colours are switched off, so the palette above is the only one available. The short names in this document are shorthand.
 
 Grain: one 200×200 SVG `feTurbulence` tile, fixed, `pointer-events: none`, 3% opacity, `mix-blend-mode: soft-light`. It is the difference between "flat black div" and "photographed dark room."
 
@@ -212,9 +214,11 @@ Three real routes, so page transitions mean something. (A one-pager with "page t
 |---|---|
 | **React 19 + TypeScript + Vite** | Already your stack. Fast feedback, and TS pays off on the geometry/motion code. No reason to switch for a one-page site. |
 | **React Router (data router)** | Three real routes, scroll restoration control, and a navigation lifecycle you can hook transitions into. TanStack Router is also fine but React Router is better documented at your stage. |
-| **`motion` (Motion for React)** | Menu stagger, route transitions, `AnimatePresence`, and `useReducedMotion` built in. You'd hand-roll all of this otherwise. **No GSAP** — ScrollTrigger is designed for pinning and timelines you don't need here, and it's a large dependency for one mechanic. |
-| **CSS Modules + design tokens in `:root`** | Not Tailwind. Tailwind is excellent, but this project is 80% typographic micro-tuning (optical sizing, tracking at 11px vs 10rem, measure, baseline alignment). Utility classes fight that. CSS Modules keep the typography readable and teach you the actual CSS. |
-| **No state library** | There is no state. Scroll progress lives in a CSS variable. Adding Zustand here would be résumé-driven development. |
+| **No animation library** | Every easing in §7 is a plain `cubic-bezier` and springs are banned by design, so CSS transitions, `@starting-style` and the View Transitions API cover everything. A library such as `motion` would spend a large part of the JS budget on features this site doesn't use (TODO.md, D2). **No GSAP** — ScrollTrigger is built for pinning and timelines this site doesn't have. |
+| **Tailwind v4 + plain CSS** | Tailwind for layout, spacing and type utilities, with the design tokens in `@theme`. The signature moment (light mask, grain, `--reveal` choreography, route wipe) stays in a plain CSS file, because that is where utility classes help least and the actual CSS is worth learning. |
+| **Zustand** | A small store for interface state only: menu open, invitation panel open, invitation sent. **Never** scroll progress or pointer position. Those stay in a CSS variable and a ref, so scrolling never re-renders React. |
+| **React Hook Form + Zod** | The invitation form. One Zod schema gives both the validation and the TypeScript type. |
+| **TanStack Query** | `useMutation` for submitting the invitation form (pending, error, success). There is no server, so this is a deliberate, small use: practice with the mutation lifecycle, not a cache. |
 | **Vitest + React Testing Library** | Menu focus trap, Escape, routing, reduced-motion branch. Behaviour, not snapshots. |
 | **Playwright** | One e2e: hero reveal reaches full light, menu is keyboard-operable, routes transition. |
 | **Lighthouse CI** | Enforce the budgets below in CI. This is the whole point of the project. |
@@ -229,7 +233,7 @@ Three real routes, so page transitions mean something. (A one-pager with "page t
 ### Performance budgets
 - LCP **< 2.0s** on throttled 4G
 - CLS **0**
-- JS **< 120KB** gzipped
+- JS **< 150KB** gzipped (raised from 120KB when the stack grew to include Zustand, React Hook Form, Zod and TanStack Query; Tailwind adds CSS, not JS). We keep 150KB for now; if a real need for more room appears later, raise it on purpose and write the reason here
 - No long task **> 50ms** during scroll
 - 60fps scroll on a mid-range Android (test on a real device, or 4× CPU throttle)
 - Lighthouse: **Performance ≥ 95, Accessibility 100, Best Practices 100, SEO 100**
@@ -252,6 +256,7 @@ Three real routes, so page transitions mean something. (A one-pager with "page t
 - 3 routes, one fragrance, one house
 - The light reveal mechanic (one)
 - Menu overlay with real focus management
+- Invitation panel with a validated request form (nothing is sent, nothing is stored)
 - Route transitions
 - Note interactions on `/fragrance`
 - Grain, caustics, type system
@@ -280,14 +285,15 @@ Every item above is a legitimate future addition and every one of them would tur
 |---|---|---|---|
 | 0 | Lock brand copy, palette, type pairing | 0.5d | All copy in this file is final |
 | 1 | Static layout, no motion, all 3 routes | 2d | Looks good as a printed page on mobile and desktop |
-| 2 | Nav + mobile menu + focus management | 2d | Keyboard-only pass, no motion yet |
+| 2 | Nav + mobile menu + focus management (+ Zustand UI store) | 2d | Keyboard-only pass, no motion yet |
+| 2b | Invitation form (React Hook Form + Zod, TanStack Query; extends the Zustand store) | 2d | Validates, shows pending/error/success, keyboard-operable, inside the JS budget |
 | 3 | **Light reveal mechanic** | 3d | 60fps on throttled CPU; reduced-motion fallback complete |
 | 4 | Note interactions + `/fragrance` detail | 2d | Hover, focus and touch all work |
 | 5 | Motion polish + route transitions | 2d | Every duration/easing from the table, no ad-hoc values |
 | 6 | A11y + performance pass, Lighthouse CI | 2d | All budgets green in CI |
 | 7 | Deploy, README, 20s demo recording | 1d | Live URL + clip at top of README |
 
-**≈ 14 working days.** If it's running past 3 weeks, cut `/maison` before cutting the quality bar.
+**≈ 16 working days.** If it's running past 3 weeks, cut `/maison` before cutting the quality bar.
 
 **Build the risky thing early.** Milestone 3 is the one that might not work. Do not leave it until week 3 — and do not build 4 other sections to "warm up" first.
 
@@ -304,6 +310,7 @@ Every item above is a legitimate future addition and every one of them would tur
 | Looks like every other Awwwards perfume site | No photography, no centered hero, no scroll hijack, one mechanic, real copy. |
 | Bodoni at huge sizes on Windows looks different | Test in Chrome, Firefox, Safari (real device). Check optical sizing and fallback metrics. |
 | Project stalls after the pretty hero | Milestone 1 requires *all* copy and *all* routes before any motion. Content-first. |
+| Library creep blows the JS budget | Measure the bundle after each new dependency. If the initial JS passes 150 KB, load the invitation form (React Hook Form, Zod, Query) as a lazy chunk on first open, or switch Zod to `zod/mini`. |
 
 ---
 
@@ -329,6 +336,7 @@ Every item above is a legitimate future addition and every one of them would tur
 | 4 | Photography phase 2 | No. Ship Direction A. |
 | 5 | `/maison`: 3 paragraphs or one long editorial | 3 short paragraphs + pull quote |
 | 6 | Add `animation-timeline` enhancement | No, unless it's a 20-line win |
+| 7 | Zod: full `zod` or `zod/mini` | Full `zod`, the version most tutorials and job listings use. Switch to `zod/mini` only if the budget is tight |
 
 ---
 
