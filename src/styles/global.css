@@ -1,0 +1,237 @@
+@import 'tailwindcss';
+
+/* Design tokens for the "Halo" look. These are the only colours, fonts and shadows the site uses. */
+@theme {
+  --color-*: initial;
+  --color-cream: #fbf4ec;
+  --color-peach: #f7c9a5;
+  --color-rose: #e99a9a;
+  --color-amber: #f0b66b;
+  --color-clay: #a4483c;
+  --color-cocoa: #3b2420;
+  --color-cocoa-soft: #7a5a52;
+  --color-white: #ffffff;
+  --color-danger: #a3271c;
+
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --shadow-glass: 0 24px 60px rgb(176 92 62 / 0.16);
+  --shadow-soft: 0 10px 26px rgb(176 92 62 / 0.12);
+  --shadow-warm: 0 14px 34px rgb(224 128 96 / 0.35);
+  --shadow-dark: 0 16px 36px rgb(59 36 32 / 0.25);
+
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-drift: drift 16s ease-in-out infinite alternate;
+  --animate-breathe: breathe 14s ease-in-out infinite alternate;
+  --animate-echo: echo 5.4s var(--ease-smooth) infinite;
+  --animate-float: float 6s ease-in-out infinite alternate;
+
+  @keyframes drift {
+    from {
+      transform: translate3d(-2%, -2%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(3%, 4%, 0) scale(1.08);
+    }
+  }
+  @keyframes breathe {
+    from {
+      transform: rotate(-5deg) scale(1);
+    }
+    to {
+      transform: rotate(7deg) scale(1.07);
+    }
+  }
+  @keyframes echo {
+    0% {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+  }
+  @keyframes float {
+    from {
+      transform: translateY(-6px) rotate(-1.5deg);
+    }
+    to {
+      transform: translateY(8px) rotate(1.5deg);
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-cream);
+    color: var(--color-cocoa);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    overflow-x: clip;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-cocoa);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: var(--color-peach);
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  /* Type scale. Each clamp() runs from the 390px mobile design to the 1440px desktop design. */
+  .t-display {
+    font: 300 clamp(6.25rem, 15.5vw, 14rem) / 0.86 var(--font-display);
+    letter-spacing: -0.045em;
+  }
+  .t-h1 {
+    font: 300 clamp(4rem, 10.4vw, 9.375rem) / 0.98 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+  .t-h2 {
+    font: 300 clamp(2.5rem, 5.55vw, 5rem) / 1.04 var(--font-display);
+    letter-spacing: -0.032em;
+  }
+  .t-name {
+    font: 300 clamp(3.5rem, 6.7vw, 6rem) / 1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+  .t-h3 {
+    font: 300 clamp(1.625rem, 3vw, 2.75rem) / 1.05 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  .t-quote {
+    font: italic 300 clamp(2.25rem, 5.55vw, 5rem) / 1.13 var(--font-display);
+    letter-spacing: -0.028em;
+  }
+  .t-lead {
+    font: 500 clamp(1.0625rem, 1.46vw, 1.3125rem) / 1.55 var(--font-sans);
+  }
+  .micro {
+    font: 700 0.6875rem / 1.2 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .accent {
+    font-style: italic;
+    color: var(--color-clay);
+  }
+
+  /* Surfaces */
+  .glass {
+    background: rgb(255 255 255 / 0.42);
+    border: 1px solid rgb(255 255 255 / 0.9);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(18px) saturate(1.15);
+  }
+  .panel-gradient {
+    background: linear-gradient(165deg, #fadfc8 0%, #f6b992 48%, #ee9c94 100%);
+  }
+  .btn-gradient {
+    background: linear-gradient(100deg, #f8c39a 0%, #f2a08f 100%);
+  }
+  .hairline {
+    height: 1px;
+    background: rgb(59 36 32 / 0.15);
+  }
+  .field {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid rgb(59 36 32 / 0.14);
+    background: rgb(255 255 255 / 0.62);
+    padding: 26px 20px 10px;
+    font-size: 1rem;
+    color: var(--color-cocoa);
+    transition:
+      border-color 0.18s,
+      box-shadow 0.18s;
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-cocoa);
+    box-shadow: 0 0 0 4px rgb(247 201 165 / 0.6);
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+
+  /* Soft glowing circle. Set --orb to an "r g b" triple and --orb-a to its strength. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    translate: -50% -50%;
+    background: radial-gradient(
+      closest-side,
+      rgb(var(--orb) / var(--orb-a, 0.6)) 0%,
+      rgb(var(--orb) / calc(var(--orb-a, 0.6) * 0.5)) 45%,
+      rgb(var(--orb) / 0) 100%
+    );
+    animation: var(--animate-drift);
+  }
+  .blob {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: var(--animate-breathe);
+  }
+  .floaty {
+    animation: var(--animate-float);
+  }
+  .echo {
+    animation: var(--animate-echo);
+    animation-fill-mode: backwards;
+  }
+
+  /* Endless ticker. The track holds the list twice and slides by half its width. */
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+  }
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* Home hero: one column on phones, three areas side by side on desktop. */
+  .hero-grid {
+    display: grid;
+    grid-template-areas: 'head' 'arch' 'body';
+  }
+  @media (width >= 64rem) {
+    .hero-grid {
+      grid-template-columns: 5fr 4fr 3fr;
+      grid-template-areas: 'head arch aside' 'body arch aside';
+      column-gap: 2rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .blob,
+  .echo,
+  .floaty,
+  .marquee-track {
+    animation: none !important;
+  }
+  .echo {
+    opacity: 1;
+  }
+}
