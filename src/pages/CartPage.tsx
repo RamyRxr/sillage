@@ -24,14 +24,14 @@ function CartRow({ line }: { line: PricedLine }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -motionTokens.distance.xl }}
       transition={easeNormal}
-      className="glass flex gap-4 rounded-[28px] p-3 sm:gap-6 sm:rounded-[36px] sm:p-5"
+      className="glass flex gap-4 rounded-[1.75rem] p-3 sm:gap-6 sm:rounded-[2.25rem] sm:p-5"
     >
-      <div className="grid size-[104px] shrink-0 place-items-center rounded-[20px] border border-white bg-white/55 sm:size-[138px] sm:rounded-[24px]">
+      <div className="grid size-[6.5rem] shrink-0 place-items-center rounded-[1.25rem] border border-white bg-white/55 sm:size-[8.625rem] sm:rounded-[1.5rem]">
         <Bottle tone={line.product.tone} className="w-11 sm:w-14" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
-          <Link to={`/shop/${line.slug}`} className="font-display text-[22px] leading-tight hover:text-clay sm:text-[40px] sm:font-light">
+          <Link to={`/shop/${line.slug}`} className="font-display text-[1.375rem] leading-tight hover:text-clay sm:text-[2.5rem] sm:font-light">
             {line.product.name}
           </Link>
           <button
@@ -50,7 +50,7 @@ function CartRow({ line }: { line: PricedLine }) {
         </p>
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <QuantityStepper value={line.quantity} itemName={line.product.name} onChange={(q) => setQuantity(line.key, q)} />
-          <span className="font-display text-[22px] sm:text-[28px]">{formatPrice(line.totalCents)}</span>
+          <span className="font-display text-[1.375rem] sm:text-[1.75rem]">{formatPrice(line.totalCents)}</span>
         </div>
       </div>
     </motion.li>
@@ -62,7 +62,7 @@ function Samples() {
   const toggleSample = useCartStore((state) => state.toggleSample)
   const perfumes = productRepository.findAll()
   return (
-    <section aria-labelledby="samples-title" className="glass rounded-[28px] p-5 sm:rounded-[36px] sm:p-8">
+    <section aria-labelledby="samples-title" className="glass rounded-[1.75rem] p-5 sm:rounded-[2.25rem] sm:p-8">
       <div className="flex items-baseline justify-between gap-4">
         <h2 id="samples-title" className="micro text-cocoa-soft">
           Choose your two free samples
@@ -96,8 +96,8 @@ function Samples() {
 
 function EmptyCart() {
   return (
-    <div className="glass relative mt-10 grid place-items-center overflow-hidden rounded-[40px] px-6 py-20 text-center lg:mt-14">
-      <Orb x="50%" y="30%" size="600px" tone="247 183 127" alpha={0.5} />
+    <div className="glass relative mt-10 grid place-items-center overflow-hidden rounded-[2.5rem] px-6 py-20 text-center lg:mt-14">
+      <Orb x="50%" y="30%" size="37.5rem" tone="247 183 127" alpha={0.5} />
       <Bottle tone="240 182 107" className="floaty relative w-20" />
       <p className="relative mt-8 font-display text-3xl">Nothing here yet</p>
       <p className="relative mt-2 text-cocoa-soft">Six perfumes are waiting in the shop.</p>
@@ -110,12 +110,12 @@ function EmptyCart() {
 
 function CartSummary({ subtotalCents, deliveryCents, totalCents }: { subtotalCents: number; deliveryCents: number; totalCents: number }) {
   return (
-    <aside aria-label="Order summary" className="glass h-fit rounded-[32px] p-6 sm:p-8 lg:sticky lg:top-32 lg:rounded-[40px]">
+    <aside aria-label="Order summary" className="glass h-fit rounded-[2rem] p-6 sm:p-8 lg:sticky lg:top-32 lg:rounded-[2.5rem]">
       <p className="micro text-cocoa-soft">Order summary</p>
       <div className="mt-5">
         <DeliveryProgress subtotalCents={subtotalCents} />
       </div>
-      <dl className="mt-6 space-y-3 text-[15px]">
+      <dl className="mt-6 space-y-3 text-[max(0.9375rem,11px)]">
         <div className="flex justify-between">
           <dt className="text-cocoa-soft">Subtotal</dt>
           <dd>{formatPrice(subtotalCents)}</dd>
@@ -128,7 +128,7 @@ function CartSummary({ subtotalCents, deliveryCents, totalCents }: { subtotalCen
       <div className="hairline mt-6" />
       <div className="mt-5 flex items-baseline justify-between">
         <span className="font-display text-2xl">Total</span>
-        <span className="font-display text-[46px] leading-none font-light">{formatPrice(totalCents)}</span>
+        <span className="font-display text-[2.875rem] leading-none font-light">{formatPrice(totalCents)}</span>
       </div>
       <ButtonLink to="/checkout" variant="gradient" size="lg" className="mt-7 w-full">
         Go to checkout
@@ -146,9 +146,9 @@ export function CartPage() {
   const itemLabel = `${summary.itemCount} ${summary.itemCount === 1 ? 'item' : 'items'}`
 
   return (
-    <section aria-labelledby="cart-page-title" className="relative mx-auto max-w-[90rem] px-5 pt-28 lg:px-20 lg:pt-40">
+    <section aria-labelledby="cart-page-title" className="page-x relative pt-28 lg:pt-40">
       <title>Your cart — Sillage</title>
-      <Orb x="88%" y="10%" size="900px" tone="247 183 127" alpha={0.55} />
+      <Orb x="88%" y="10%" size="56.25rem" tone="247 183 127" alpha={0.55} />
       <div className="relative">
         <p className="micro text-cocoa-soft">Your selection · {itemLabel}</p>
         <h1 id="cart-page-title" className="t-h1 mt-4">
@@ -158,7 +158,7 @@ export function CartPage() {
         {priced.length === 0 ? (
           <EmptyCart />
         ) : (
-          <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-[1fr_440px] lg:gap-12">
+          <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-[1fr_27.5rem] lg:gap-12">
             <div className="space-y-5">
               <ul className="space-y-4">
                 <AnimatePresence initial={false} mode="popLayout">

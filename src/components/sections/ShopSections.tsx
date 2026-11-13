@@ -14,9 +14,9 @@ import { SectionHeading } from './SectionHeading'
 function SetTray() {
   const perfumes = productRepository.findAll()
   return (
-    <div className="glass grid grid-cols-3 place-items-end gap-x-4 gap-y-6 rounded-[32px] px-8 pt-8 pb-6">
+    <div className="glass grid grid-cols-3 place-items-end gap-x-4 gap-y-6 rounded-[2rem] px-8 pt-8 pb-6">
       {perfumes.map((product, index) => (
-        <div key={product.slug} className="floaty w-full max-w-[60px]" style={{ animationDelay: `${index * -0.8}s` }}>
+        <div key={product.slug} className="floaty w-full max-w-[3.75rem]" style={{ animationDelay: `${index * -0.8}s` }}>
           <Bottle tone={product.tone} />
         </div>
       ))}
@@ -28,12 +28,12 @@ export function DiscoveryPanel() {
   const set = productRepository.findBySlug(DISCOVERY_SET_SLUG)
   if (!set) return null
   return (
-    <Reveal className="mx-auto max-w-[90rem] px-5 lg:px-20">
+    <Reveal className="page-x">
       <section
         aria-labelledby="discovery-title"
-        className="panel-gradient relative grid items-center gap-10 overflow-hidden rounded-[40px] p-6 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:rounded-[56px] lg:p-[72px]"
+        className="panel-gradient relative grid items-center gap-10 overflow-hidden rounded-[2.5rem] p-6 sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:rounded-[3.5rem] lg:p-[4.5rem]"
       >
-        <Orb x="80%" y="40%" size="800px" tone="255 246 232" alpha={0.9} />
+        <Orb x="80%" y="40%" size="50rem" tone="255 246 232" alpha={0.9} />
         <div className="relative">
           <p className="micro">The discovery set</p>
           <h2 id="discovery-title" className="t-h2 mt-4">
@@ -48,7 +48,7 @@ export function DiscoveryPanel() {
             className="mt-8"
           />
         </div>
-        <div className="relative mx-auto w-full max-w-[400px]">
+        <div className="relative mx-auto w-full max-w-[25rem]">
           <SetTray />
         </div>
       </section>
@@ -66,7 +66,7 @@ const FAMILY_NOTES: Record<Family, { line: string; tone: string }> = {
 export function FamilyTiles({ onPick }: { onPick?: () => void }) {
   const counts = productRepository.familyCounts()
   return (
-    <section aria-labelledby="families-title" className="mx-auto max-w-[90rem] px-5 lg:px-20">
+    <section aria-labelledby="families-title" className="page-x">
       <SectionHeading id="families-title" eyebrow="Find your scent" title={[{ text: 'Shop by' }, { text: 'family', accent: true }]} />
       <Stagger className="mt-10 grid grid-cols-2 gap-4 lg:mt-14 lg:grid-cols-4 lg:gap-8">
         {counts.map(({ family, count }) => (
@@ -74,7 +74,7 @@ export function FamilyTiles({ onPick }: { onPick?: () => void }) {
             <Link
               to={`/shop?family=${family}`}
               onClick={onPick}
-              className="glass group relative flex aspect-[296/340] flex-col justify-end overflow-hidden rounded-[28px] p-4 transition-transform duration-500 hover:-translate-y-1 lg:rounded-[40px] lg:p-7"
+              className="glass group relative flex aspect-[296/340] flex-col justify-end overflow-hidden rounded-[1.75rem] p-4 transition-transform duration-500 hover:-translate-y-1 lg:rounded-[2.5rem] lg:p-7"
             >
               <Orb x="50%" y="22%" size="150%" tone={FAMILY_NOTES[family].tone} alpha={0.6} />
               <span className="relative t-h3 transition-colors group-hover:text-clay">{family}</span>

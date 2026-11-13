@@ -5,9 +5,9 @@ import { Orb } from '../components/ui/Decor'
 
 export function NotFoundPage() {
   return (
-    <section aria-labelledby="not-found-title" className="relative mx-auto grid min-h-[80svh] max-w-[90rem] place-items-center px-5 pt-28 text-center">
+    <section aria-labelledby="not-found-title" className="page-x relative grid min-h-[80svh] place-items-center pt-28 text-center">
       <title>Page not found — Sillage</title>
-      <Orb x="50%" y="45%" size="900px" tone="247 183 127" alpha={0.6} />
+      <Orb x="50%" y="45%" size="56.25rem" tone="247 183 127" alpha={0.6} />
       <div className="relative">
         <Bottle tone="233 154 154" className="floaty mx-auto w-20 opacity-80" />
         <p className="micro mt-10 text-cocoa-soft">404</p>

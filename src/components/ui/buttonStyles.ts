@@ -12,8 +12,8 @@ const VARIANTS: Record<ButtonVariant, string> = {
 
 const SIZES: Record<ButtonSize, string> = {
   sm: 'h-11 px-5 text-sm',
-  md: 'h-14 px-7 text-[15px]',
-  lg: 'h-[60px] px-8 text-[15px]',
+  md: 'h-14 px-7 text-[max(0.9375rem,11px)]',
+  lg: 'h-[3.75rem] px-8 text-[max(0.9375rem,11px)]',
 }
 
 export function buttonClasses(variant: ButtonVariant = 'gradient', size: ButtonSize = 'md', className?: string): string {

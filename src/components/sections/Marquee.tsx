@@ -22,7 +22,7 @@ export function Marquee() {
         {[0, 1].map((copy) => (
           <ul key={copy} className="flex shrink-0 items-center">
             {WORDS.map((word) => (
-              <li key={word} className="flex items-center gap-10 pr-10 font-display text-[26px] font-light italic lg:gap-14 lg:pr-14 lg:text-[44px]">
+              <li key={word} className="flex items-center gap-10 pr-10 font-display text-[1.625rem] font-light italic lg:gap-14 lg:pr-14 lg:text-[2.75rem]">
                 {word}
                 <span className="size-2 rounded-full bg-peach lg:size-2.5" />
               </li>

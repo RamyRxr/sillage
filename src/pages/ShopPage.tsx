@@ -96,7 +96,7 @@ function ResultsGrid({ results }: { results: readonly Product[] }) {
   const reduce = useReducedMotion()
   const pop = reduce ? 1 : motionTokens.scale.subtle
   return (
-    <motion.ul layout className="mt-10 grid grid-cols-2 gap-4 lg:mt-12 lg:grid-cols-3 lg:gap-[52px]">
+    <motion.ul layout className="mt-10 product-grid lg:mt-12">
       <AnimatePresence mode="popLayout" initial={false}>
         {results.map((product, index) => (
           <motion.li
@@ -116,7 +116,7 @@ function ResultsGrid({ results }: { results: readonly Product[] }) {
 
 function NoResults({ onReset }: { onReset: () => void }) {
   return (
-    <div className="glass mt-10 grid place-items-center rounded-[40px] px-6 py-20 text-center">
+    <div className="glass mt-10 grid place-items-center rounded-[2.5rem] px-6 py-20 text-center">
       <p className="font-display text-3xl">Nothing matches that yet</p>
       <p className="mt-2 text-cocoa-soft">Try another family or a different note.</p>
       <Button variant="dark" className="mt-8" onClick={onReset}>
@@ -176,9 +176,9 @@ export function ShopPage() {
   return (
     <>
       <title>Shop all perfumes — Sillage</title>
-      <section aria-labelledby="shop-title" className="relative mx-auto max-w-[90rem] px-5 pt-28 lg:px-20 lg:pt-40">
-        <Orb x="85%" y="18%" size="900px" tone="247 183 127" alpha={0.6} />
-        <Orb x="0%" y="70%" size="600px" tone="233 154 154" alpha={0.4} delay={-6} />
+      <section aria-labelledby="shop-title" className="page-x relative pt-28 lg:pt-40">
+        <Orb x="85%" y="18%" size="56.25rem" tone="247 183 127" alpha={0.6} />
+        <Orb x="0%" y="70%" size="37.5rem" tone="233 154 154" alpha={0.4} delay={-6} />
         <div className="relative">
           <p className="micro text-cocoa-soft">The collection</p>
           <h1 id="shop-title" className="t-h1 mt-4">

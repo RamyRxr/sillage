@@ -8,8 +8,8 @@ export const QUOTE = 'We did not make a perfume to be noticed. We made one to be
 
 export function StoryTeaser() {
   return (
-    <section aria-labelledby="story-title" className="relative mx-auto grid max-w-[90rem] items-center gap-14 px-5 lg:grid-cols-[1.2fr_0.8fr] lg:px-20">
-      <Orb x="8%" y="60%" size="700px" tone="247 183 127" alpha={0.35} />
+    <section aria-labelledby="story-title" className="page-x relative grid items-center gap-14 lg:grid-cols-[1.2fr_0.8fr]">
+      <Orb x="8%" y="60%" size="43.75rem" tone="247 183 127" alpha={0.35} />
       <div className="relative">
         <Reveal distance={8}>
           <p className="micro text-cocoa-soft">Our story</p>
@@ -23,7 +23,7 @@ export function StoryTeaser() {
           </ButtonLink>
         </Reveal>
       </div>
-      <Reveal className="relative mx-auto w-full max-w-[420px]">
+      <Reveal className="relative mx-auto w-full max-w-[26.25rem]">
         <div className="relative aspect-[42/50]">
           <Echo shape="rounded-full" />
           <ImageSlot caption="Atelier image" className="absolute inset-0 rounded-full" />

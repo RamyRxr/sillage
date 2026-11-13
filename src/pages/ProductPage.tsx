@@ -26,7 +26,10 @@ const VIEWS: ReadonlyArray<{ value: View; label: string }> = [
   { value: 'detail', label: 'Close-up of the cap' },
   { value: 'tone', label: 'Colour of the juice' },
 ]
-const ARCH = 'rounded-t-full rounded-b-[32px]'
+const ARCH = 'rounded-t-full rounded-b-[2rem]'
+// "You may also like": two cards on phones, three on smaller desktops, four from xl up.
+// One entry per card shown, so the list length is also how many related perfumes to fetch.
+const RELATED_VISIBILITY = [undefined, undefined, 'hidden lg:block', 'hidden xl:block']
 
 function Visual({ product, view }: { product: Product; view: View }) {
   if (view === 'tone') {
@@ -65,7 +68,7 @@ function Gallery({ product }: { product: Product }) {
             aria-pressed={view === option.value}
             onClick={() => setView(option.value)}
             className={cn(
-              'relative grid size-16 place-items-center overflow-hidden rounded-[18px] border-[1.5px] bg-white/50 transition-colors lg:size-24 lg:rounded-[24px]',
+              'relative grid size-16 place-items-center overflow-hidden rounded-[1.125rem] border-[1.5px] bg-white/50 transition-colors lg:size-24 lg:rounded-[1.5rem]',
               view === option.value ? 'border-cocoa' : 'border-dashed border-cocoa/30 hover:border-cocoa/60',
             )}
           >
@@ -75,7 +78,7 @@ function Gallery({ product }: { product: Product }) {
           </button>
         ))}
       </div>
-      <div className="relative w-full max-w-[520px] flex-1">
+      <div className="relative w-full max-w-[32.5rem] flex-1">
         <div className={cn('glass relative grid aspect-[13/17] place-items-center overflow-hidden', ARCH)}>
           <Orb x="50%" y="45%" size="130%" tone={product.tone} alpha={0.6} />
           <AnimatePresence mode="wait" initial={false}>
@@ -98,7 +101,7 @@ function Gallery({ product }: { product: Product }) {
 
 function AnimatedPrice({ cents }: { cents: number }) {
   return (
-    <span className="relative inline-block h-[46px] overflow-hidden font-display text-[46px] leading-none font-light">
+    <span className="relative inline-block h-[2.875rem] overflow-hidden font-display text-[2.875rem] leading-none font-light">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={cents}
@@ -121,7 +124,7 @@ function NoteChips({ product }: { product: Product }) {
     <ul className="mt-7 flex flex-wrap gap-3 border-t border-cocoa/15 pt-6">
       {product.notes.map((note) => (
         <li key={note.name}>
-          <a href="#notes" className="glass inline-flex h-12 items-center rounded-full px-6 font-display text-[19px] transition-colors hover:text-clay">
+          <a href="#notes" className="glass inline-flex h-12 items-center rounded-full px-6 font-display text-[1.1875rem] transition-colors hover:text-clay">
             {note.name}
           </a>
         </li>
@@ -152,7 +155,7 @@ function BuyControls({ product }: { product: Product }) {
         </>
       )}
       <div className="mt-7 flex flex-wrap gap-3">
-        <QuantityStepper value={quantity} onChange={setQuantity} itemName={product.name} className="h-[60px]" />
+        <QuantityStepper value={quantity} onChange={setQuantity} itemName={product.name} className="h-[3.75rem]" />
         <AddToCartButton
           product={product}
           ml={ml}
@@ -161,7 +164,7 @@ function BuyControls({ product }: { product: Product }) {
           variant="gradient"
           size="lg"
           label={`Add to cart · ${formatPrice(total)}`}
-          className="min-w-[240px] flex-1"
+          className="min-w-[15rem] flex-1"
         />
       </div>
     </>
@@ -195,13 +198,13 @@ export function ProductPage() {
   const product = productRepository.findBySlug(slug)
   if (!product) return <NotFoundPage />
 
-  const related = productRepository.findRelated(product.slug, 3)
+  const related = productRepository.findRelated(product.slug, RELATED_VISIBILITY.length)
   return (
     <>
       <title>{`${product.name} — Sillage`}</title>
-      <section aria-label={product.name} className="relative mx-auto max-w-[90rem] px-5 pt-24 lg:px-20 lg:pt-32">
-        <Orb x="30%" y="40%" size="1000px" tone="247 183 127" alpha={0.6} />
-        <Orb x="95%" y="85%" size="700px" tone="233 154 154" alpha={0.4} delay={-5} />
+      <section aria-label={product.name} className="page-x relative pt-24 lg:pt-32">
+        <Orb x="30%" y="40%" size="62.5rem" tone="247 183 127" alpha={0.6} />
+        <Orb x="95%" y="85%" size="43.75rem" tone="233 154 154" alpha={0.4} delay={-5} />
         <nav aria-label="Breadcrumb" className="micro relative text-cocoa-soft">
           <ol className="flex flex-wrap gap-2">
             <li>
@@ -232,11 +235,11 @@ export function ProductPage() {
         </>
       )}
 
-      <section aria-labelledby="related-title" className="mx-auto mt-24 max-w-[90rem] px-5 lg:mt-36 lg:px-20">
+      <section aria-labelledby="related-title" className="page-x mt-24 lg:mt-36">
         <SectionHeading id="related-title" eyebrow="More from the house" title={[{ text: 'You may' }, { text: 'also like', accent: true }]} />
-        <Stagger className="mt-10 grid grid-cols-2 gap-4 lg:mt-14 lg:grid-cols-3 lg:gap-[52px]">
+        <Stagger className="mt-10 product-grid lg:mt-14">
           {related.map((item, index) => (
-            <StaggerItem key={item.slug} className={index === 2 ? 'hidden lg:block' : undefined}>
+            <StaggerItem key={item.slug} className={RELATED_VISIBILITY[index]}>
               <ProductCard product={item} />
             </StaggerItem>
           ))}

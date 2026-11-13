@@ -49,7 +49,7 @@ function DesktopNav() {
           end={item.end}
           className={({ isActive }) =>
             cn(
-              'relative isolate inline-flex h-10 w-[136px] items-center justify-center rounded-full text-sm font-semibold transition-colors',
+              'relative isolate inline-flex h-10 w-[8.5rem] items-center justify-center rounded-full text-sm font-semibold transition-colors',
               isActive ? 'text-cocoa' : 'text-cocoa-soft hover:text-cocoa',
             )
           }
@@ -111,11 +111,11 @@ export function SiteHeader() {
         transition={easeNormal}
         className={cn(
           'fixed inset-x-0 top-0 z-40 transition-[background-color,box-shadow,backdrop-filter] duration-500',
-          isScrolled && 'bg-cream/70 shadow-[0_10px_30px_rgb(176_92_62/0.08)] backdrop-blur-xl',
+          isScrolled && 'bg-cream/70 shadow-[0_0.625rem_1.875rem_rgb(176_92_62/0.08)] backdrop-blur-xl',
         )}
       >
-        <div className="relative mx-auto flex h-[72px] max-w-[90rem] items-center justify-between px-5 lg:h-[96px] lg:px-20">
-          <Link to="/" aria-label="Sillage, home" className="text-[13px] font-extrabold tracking-[0.42em]">
+        <div className="page-x relative flex h-[4.5rem] items-center justify-between lg:h-[6rem]">
+          <Link to="/" aria-label="Sillage, home" className="text-[max(0.8125rem,11px)] font-extrabold tracking-[0.42em]">
             SILLAGE
           </Link>
 

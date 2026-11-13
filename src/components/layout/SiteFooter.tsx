@@ -8,11 +8,11 @@ const LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative mx-auto mt-24 max-w-[90rem] px-5 pb-10 lg:mt-32 lg:px-20">
+    <footer className="page-x relative mt-24 pb-10 lg:mt-32">
       <div className="hairline" />
       <div className="flex flex-col gap-8 pt-10 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <p className="text-[13px] font-extrabold tracking-[0.42em]">SILLAGE</p>
+          <p className="text-[max(0.8125rem,11px)] font-extrabold tracking-[0.42em]">SILLAGE</p>
           <p className="mt-3 max-w-[30ch] text-sm text-cocoa-soft">A perfume is not a smell. It is the space you leave behind.</p>
         </div>
         <nav aria-label="Footer">

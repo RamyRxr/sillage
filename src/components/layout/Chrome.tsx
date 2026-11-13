@@ -45,7 +45,7 @@ export function RouteCurtain() {
       transition={{ duration, times: [0, 0.36, 0.52, 1], ease: motionTokens.easing.smooth }}
     >
       <motion.span
-        className="text-[13px] font-extrabold tracking-[0.42em] text-cocoa"
+        className="text-[max(0.8125rem,11px)] font-extrabold tracking-[0.42em] text-cocoa"
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 1, 0] }}
         transition={{ duration, times: [0, 0.34, 0.5, 0.8] }}

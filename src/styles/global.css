@@ -16,10 +16,15 @@
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  --shadow-glass: 0 24px 60px rgb(176 92 62 / 0.16);
-  --shadow-soft: 0 10px 26px rgb(176 92 62 / 0.12);
-  --shadow-warm: 0 14px 34px rgb(224 128 96 / 0.35);
-  --shadow-dark: 0 16px 36px rgb(59 36 32 / 0.25);
+  /* In rem so they shrink with the rest of the desktop layout. */
+  --shadow-glass: 0 1.5rem 3.75rem rgb(176 92 62 / 0.16);
+  --shadow-soft: 0 0.625rem 1.625rem rgb(176 92 62 / 0.12);
+  --shadow-warm: 0 0.875rem 2.125rem rgb(224 128 96 / 0.35);
+  --shadow-dark: 0 1rem 2.25rem rgb(59 36 32 / 0.25);
+
+  /* Small text never drops below 11px, even after the desktop root size shrinks it. */
+  --text-xs: max(0.75rem, 11px);
+  --text-sm: max(0.875rem, 11px);
 
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -68,6 +73,22 @@
 }
 
 @layer base {
+  /*
+    Desktop scale. The design was first drawn for a 1440x900 page, which felt too big on a 1920x1080
+    laptop (125% Windows scaling, browser at 110%) where the page is only about 1396x680. Desktop now
+    uses 80/110 of the phone scale: every rem size shrinks together, so the site at 110% zoom looks the
+    way the old one did at 80%. --ui-scale does the same for sizes tied to the screen width (vw).
+    Media queries still measure in the browser's own 16px rem, so breakpoints don't move.
+  */
+  :root {
+    --ui-scale: 1;
+  }
+  @media (width >= 64rem) {
+    :root {
+      --ui-scale: calc(80 / 110);
+      font-size: calc(var(--ui-scale) * 100%);
+    }
+  }
   html {
     background: var(--color-cream);
     color: var(--color-cocoa);
@@ -98,34 +119,34 @@
 @layer components {
   /* Type scale. Each clamp() runs from the 390px mobile design to the 1440px desktop design. */
   .t-display {
-    font: 300 clamp(6.25rem, 15.5vw, 14rem) / 0.86 var(--font-display);
+    font: 300 clamp(6.25rem, calc(15.5vw * var(--ui-scale)), 14rem) / 0.86 var(--font-display);
     letter-spacing: -0.045em;
   }
   .t-h1 {
-    font: 300 clamp(4rem, 10.4vw, 9.375rem) / 0.98 var(--font-display);
+    font: 300 clamp(4rem, calc(10.4vw * var(--ui-scale)), 9.375rem) / 0.98 var(--font-display);
     letter-spacing: -0.04em;
   }
   .t-h2 {
-    font: 300 clamp(2.5rem, 5.55vw, 5rem) / 1.04 var(--font-display);
+    font: 300 clamp(2.5rem, calc(5.55vw * var(--ui-scale)), 5rem) / 1.04 var(--font-display);
     letter-spacing: -0.032em;
   }
   .t-name {
-    font: 300 clamp(3.5rem, 6.7vw, 6rem) / 1 var(--font-display);
+    font: 300 clamp(3.5rem, calc(6.7vw * var(--ui-scale)), 6rem) / 1 var(--font-display);
     letter-spacing: -0.03em;
   }
   .t-h3 {
-    font: 300 clamp(1.625rem, 3vw, 2.75rem) / 1.05 var(--font-display);
+    font: 300 clamp(1.625rem, calc(3vw * var(--ui-scale)), 2.75rem) / 1.05 var(--font-display);
     letter-spacing: -0.02em;
   }
   .t-quote {
-    font: italic 300 clamp(2.25rem, 5.55vw, 5rem) / 1.13 var(--font-display);
+    font: italic 300 clamp(2.25rem, calc(5.55vw * var(--ui-scale)), 5rem) / 1.13 var(--font-display);
     letter-spacing: -0.028em;
   }
   .t-lead {
-    font: 500 clamp(1.0625rem, 1.46vw, 1.3125rem) / 1.55 var(--font-sans);
+    font: 500 clamp(1.0625rem, calc(1.46vw * var(--ui-scale)), 1.3125rem) / 1.55 var(--font-sans);
   }
   .micro {
-    font: 700 0.6875rem / 1.2 var(--font-sans);
+    font: 700 max(0.6875rem, 11px) / 1.2 var(--font-sans);
     letter-spacing: 0.2em;
     text-transform: uppercase;
   }
@@ -153,10 +174,10 @@
   }
   .field {
     width: 100%;
-    border-radius: 20px;
+    border-radius: 1.25rem;
     border: 1px solid rgb(59 36 32 / 0.14);
     background: rgb(255 255 255 / 0.62);
-    padding: 26px 20px 10px;
+    padding: 1.625rem 1.25rem 0.625rem;
     font-size: 1rem;
     color: var(--color-cocoa);
     transition:
@@ -220,6 +241,37 @@
       grid-template-areas: 'head arch aside' 'body arch aside';
       column-gap: 2rem;
     }
+  }
+}
+
+/*
+  Page width. Phones keep a 20px edge. On desktop the side space grows with the screen up to 120px,
+  and content stops at 1200px (1440px including the side space), as in the version 3 design.
+  These two are px on purpose: they describe the screen, so they must not shrink with the root size.
+*/
+@utility page-x {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 90rem;
+  padding-inline: 1.25rem;
+  @media (width >= 64rem) {
+    max-width: 1440px;
+    padding-inline: min(8.3333vw, 120px);
+  }
+}
+
+/* Product cards: two per row on phones, three on smaller desktops, four from 1280px up. */
+@utility product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 3.25rem;
+  }
+  @media (width >= 80rem) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.75rem;
   }
 }
 

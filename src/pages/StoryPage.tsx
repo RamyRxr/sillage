@@ -19,9 +19,9 @@ const STEP = ['', 'lg:mt-12', 'lg:mt-24'] as const
 
 function StoryHero() {
   return (
-  <section aria-labelledby="story-page-title" className="relative mx-auto grid max-w-[90rem] items-center gap-14 px-5 pt-28 lg:grid-cols-[1.25fr_0.75fr] lg:px-20 lg:pt-40">
-    <Orb x="30%" y="45%" size="1000px" tone="247 183 127" alpha={0.7} />
-    <Orb x="95%" y="90%" size="700px" tone="233 154 154" alpha={0.45} delay={-6} />
+  <section aria-labelledby="story-page-title" className="page-x relative grid items-center gap-14 pt-28 lg:grid-cols-[1.25fr_0.75fr] lg:pt-40">
+    <Orb x="30%" y="45%" size="62.5rem" tone="247 183 127" alpha={0.7} />
+    <Orb x="95%" y="90%" size="43.75rem" tone="233 154 154" alpha={0.45} delay={-6} />
     <div className="relative">
       <p className="micro text-cocoa-soft">The house</p>
       <h1 id="story-page-title" className="t-quote mt-6">
@@ -32,7 +32,7 @@ function StoryHero() {
         <p className="micro mt-5 text-cocoa-soft">Est. 2024 · Grasse, France</p>
       </Reveal>
     </div>
-    <Reveal delay={0.3} className="relative mx-auto w-full max-w-[340px]">
+    <Reveal delay={0.3} className="relative mx-auto w-full max-w-[21.25rem]">
       <div className="relative aspect-[34/52]">
         <Echo shape="rounded-full" />
         <ImageSlot caption="Atelier image" className="absolute inset-0 rounded-full" />
@@ -46,9 +46,9 @@ type Fact = { value: number; label: string }
 
 function StoryNumbers({ facts }: { facts: readonly Fact[] }) {
   return (
-  <Reveal className="mx-auto mt-24 max-w-[90rem] px-5 lg:mt-36 lg:px-20">
-    <section aria-label="The house in numbers" className="glass relative overflow-hidden rounded-[40px] lg:rounded-[56px]">
-      <Orb x="45%" y="20%" size="900px" tone="255 226 184" alpha={0.7} />
+  <Reveal className="page-x mt-24 lg:mt-36">
+    <section aria-label="The house in numbers" className="glass relative overflow-hidden rounded-[2.5rem] lg:rounded-[3.5rem]">
+      <Orb x="45%" y="20%" size="56.25rem" tone="255 226 184" alpha={0.7} />
       <dl className="relative grid lg:grid-cols-3">
         {facts.map((fact, index) => (
           <div
@@ -59,7 +59,7 @@ function StoryNumbers({ facts }: { facts: readonly Fact[] }) {
             )}
           >
             <dt className="micro order-2 text-cocoa-soft lg:mt-6">{fact.label}</dt>
-            <dd className="order-1 font-display text-[64px] leading-none font-light tracking-[-0.04em] lg:text-[150px]">
+            <dd className="order-1 font-display text-[4rem] leading-none font-light tracking-[-0.04em] lg:text-[9.375rem]">
               <CountUp to={fact.value} />
             </dd>
           </div>
@@ -72,9 +72,9 @@ function StoryNumbers({ facts }: { facts: readonly Fact[] }) {
 
 function CollectionBand({ count }: { count: number }) {
   return (
-  <Reveal className="mx-auto mt-24 max-w-[90rem] px-5 lg:mt-36 lg:px-20">
-    <section aria-labelledby="collection-band" className="panel-gradient relative flex flex-col gap-8 overflow-hidden rounded-[40px] p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:rounded-[56px] lg:p-16">
-      <Orb x="80%" y="40%" size="760px" tone="255 246 232" alpha={0.9} />
+  <Reveal className="page-x mt-24 lg:mt-36">
+    <section aria-labelledby="collection-band" className="panel-gradient relative flex flex-col gap-8 overflow-hidden rounded-[2.5rem] p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:rounded-[3.5rem] lg:p-16">
+      <Orb x="80%" y="40%" size="47.5rem" tone="255 246 232" alpha={0.9} />
       <div className="relative">
         <h2 id="collection-band" className="t-h2">
           The <span className="accent">collection</span>
@@ -101,15 +101,15 @@ export function StoryPage() {
       <title>Our story — Sillage</title>
       <StoryHero />
 
-      <section aria-label="About the house" className="mx-auto mt-28 max-w-[90rem] px-5 lg:mt-40 lg:px-20">
+      <section aria-label="About the house" className="page-x mt-28 lg:mt-40">
         <p className="micro text-cocoa-soft">About the house</p>
-        <Stagger className="mt-8 grid gap-12 lg:grid-cols-3 lg:gap-[52px]">
+        <Stagger className="mt-8 grid gap-12 lg:grid-cols-3 lg:gap-[3.25rem]">
           {PARAGRAPHS.map((text, index) => (
             <StaggerItem key={text} className={cn('border-t border-cocoa/15 pt-7', STEP[index])}>
-              <p className={cn('font-display text-[64px] leading-none font-light lg:text-[120px]', NUMERAL_COLORS[index])} aria-hidden="true">
+              <p className={cn('font-display text-[4rem] leading-none font-light lg:text-[7.5rem]', NUMERAL_COLORS[index])} aria-hidden="true">
                 0{index + 1}
               </p>
-              <p className="mt-6 text-[17px] leading-[1.75] lg:text-[19px]">{text}</p>
+              <p className="mt-6 text-[1.0625rem] leading-[1.75] lg:text-[1.1875rem]">{text}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -117,10 +117,10 @@ export function StoryPage() {
 
       <StoryNumbers facts={facts} />
 
-      <section aria-label="The atelier" className="relative mx-auto mt-24 max-w-[90rem] px-5 lg:mt-36 lg:px-20">
+      <section aria-label="The atelier" className="page-x relative mt-24 lg:mt-36">
         <p className="micro text-cocoa-soft">The atelier</p>
         <Reveal className="relative mt-6">
-          <ImageSlot caption="Atelier image" detail="Wide photo of the workshop" className="aspect-[350/420] rounded-[40px] sm:aspect-[1280/820] lg:rounded-[56px]" />
+          <ImageSlot caption="Atelier image" detail="Wide photo of the workshop" className="aspect-[350/420] rounded-[2.5rem] sm:aspect-[1280/820] lg:rounded-[3.5rem]" />
           <span className="glass absolute bottom-6 left-6 inline-flex h-14 items-center rounded-full px-7 font-display text-xl lg:bottom-10 lg:left-10">
             One atelier · Grasse, France
           </span>

@@ -43,11 +43,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
       className={cn(
-        'glass group relative flex h-full flex-col rounded-[28px] p-2.5 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-cocoa sm:rounded-[40px] sm:p-5',
+        'glass group relative flex h-full flex-col rounded-[1.75rem] p-2.5 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-cocoa sm:rounded-[2.5rem] sm:p-5',
         className,
       )}
     >
-      <div className="relative grid aspect-[16/15] place-items-center overflow-hidden rounded-[20px] border border-white bg-white/45 sm:aspect-square sm:rounded-[28px]">
+      <div className="relative grid aspect-[16/15] place-items-center overflow-hidden rounded-[1.25rem] border border-white bg-white/45 sm:aspect-square sm:rounded-[1.75rem]">
         <Orb x="50%" y="40%" size="135%" tone={product.tone} alpha={0.55} />
         <Bottle
           tone={product.tone}
@@ -65,14 +65,14 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {product.family}
           <span className="hidden sm:inline"> · 50 ml</span>
         </p>
-        <h3 className="mt-2 font-display text-[21px] leading-[1.08] tracking-[-0.01em] sm:text-[38px] sm:font-light sm:tracking-[-0.02em]">
+        <h3 className="mt-2 font-display text-[1.3125rem] leading-[1.08] tracking-[-0.01em] sm:text-[2.375rem] sm:font-light sm:tracking-[-0.02em]">
           <Link to={`/shop/${product.slug}`} className="outline-none after:absolute after:inset-0 after:rounded-[inherit]">
             {product.name}
           </Link>
         </h3>
         <p className="mt-2 hidden text-sm text-cocoa-soft sm:block">{notes}</p>
         <div className="mt-auto flex items-center justify-between gap-3 pt-4 sm:mt-6 sm:border-t sm:border-cocoa/15 sm:pt-5">
-          <span className="font-display text-[22px] sm:text-[28px]">{formatPrice(price)}</span>
+          <span className="font-display text-[1.375rem] sm:text-[1.75rem]">{formatPrice(price)}</span>
           <AddToCartButton product={product} className="relative z-10" />
         </div>
       </div>

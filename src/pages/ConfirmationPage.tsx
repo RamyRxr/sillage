@@ -55,11 +55,11 @@ export function ConfirmationPage() {
     .filter((name): name is string => Boolean(name))
 
   return (
-    <section aria-labelledby="thanks-title" className="relative mx-auto max-w-[90rem] px-5 pt-28 text-center lg:pt-36">
+    <section aria-labelledby="thanks-title" className="page-x relative pt-28 text-center lg:pt-36">
       <title>Order confirmed — Sillage</title>
-      <Orb x="50%" y="25%" size="1100px" tone="247 183 127" alpha={0.65} />
-      <Orb x="8%" y="90%" size="600px" tone="233 154 154" alpha={0.4} delay={-5} />
-      <Stagger className="relative mx-auto max-w-[600px]">
+      <Orb x="50%" y="25%" size="68.75rem" tone="247 183 127" alpha={0.65} />
+      <Orb x="8%" y="90%" size="37.5rem" tone="233 154 154" alpha={0.4} delay={-5} />
+      <Stagger className="relative mx-auto max-w-[37.5rem]">
         <StaggerItem>
           <DrawnCheck />
         </StaggerItem>
@@ -76,11 +76,11 @@ export function ConfirmationPage() {
           </p>
         </StaggerItem>
         <StaggerItem>
-          <div className="glass mt-10 rounded-[32px] p-6 text-left sm:p-8 lg:rounded-[40px]">
+          <div className="glass mt-10 rounded-[2rem] p-6 text-left sm:p-8 lg:rounded-[2.5rem]">
             <p className="micro text-cocoa-soft">Order {order.number}</p>
             <ul className="mt-5 space-y-3">
               {order.items.map((item) => (
-                <li key={`${item.name}-${item.sizeLabel}`} className="flex justify-between gap-4 font-display text-[20px] sm:text-[22px]">
+                <li key={`${item.name}-${item.sizeLabel}`} className="flex justify-between gap-4 font-display text-[1.25rem] sm:text-[1.375rem]">
                   <span>
                     {item.name} <span className="micro text-cocoa-soft">{item.sizeLabel} × {item.quantity}</span>
                   </span>
@@ -92,7 +92,7 @@ export function ConfirmationPage() {
             <div className="hairline mt-5" />
             <div className="mt-5 flex items-baseline justify-between">
               <span className="font-display text-2xl">Total</span>
-              <span className="font-display text-[46px] leading-none font-light">{formatPrice(order.totalCents)}</span>
+              <span className="font-display text-[2.875rem] leading-none font-light">{formatPrice(order.totalCents)}</span>
             </div>
           </div>
         </StaggerItem>

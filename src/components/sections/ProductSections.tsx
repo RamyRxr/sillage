@@ -12,7 +12,7 @@ const NOTE_FILLS = ['#F0B66B', '#E99A9A', '#BE6E5C'] as const
 /** A moving colour field standing in for a macro photo of the ingredient. */
 function NoteTexture({ index }: { index: number }) {
   return (
-    <div aria-hidden="true" className="relative h-[110px] overflow-hidden rounded-full border border-white bg-white/45 lg:h-[200px]">
+    <div aria-hidden="true" className="relative h-[6.875rem] overflow-hidden rounded-full border border-white bg-white/45 lg:h-[12.5rem]">
       <Orb x="60%" y="50%" size="130%" tone={NOTE_TONES[index]} alpha={0.6} delay={index * -5} />
       <BlobField
         viewBox="0 0 540 200"
@@ -28,14 +28,14 @@ function NoteTexture({ index }: { index: number }) {
 
 export function NotesInDepth({ product }: { product: Product }) {
   return (
-    <section id="notes" aria-labelledby="notes-title" className="mx-auto max-w-[90rem] scroll-mt-28 px-5 lg:px-20">
+    <section id="notes" aria-labelledby="notes-title" className="page-x scroll-mt-28">
       <SectionHeading id="notes-title" eyebrow="Notes in depth" title={[{ text: 'How it' }, { text: 'unfolds', accent: true }]} />
       <ol className="mt-10 lg:mt-14">
         {product.notes.map((note, index) => (
-          <li key={note.name} className="border-t border-cocoa/15 py-8 lg:grid lg:grid-cols-[120px_1fr_540px] lg:items-center lg:gap-10 lg:py-10">
+          <li key={note.name} className="border-t border-cocoa/15 py-8 lg:grid lg:grid-cols-[10rem_1fr_33.75rem] lg:items-center lg:gap-10 lg:py-10">
             <Reveal className="flex items-center gap-3 lg:block">
-              <span className="font-display text-[28px] text-cocoa-soft">0{index + 1}</span>
-              <p className="micro flex items-center gap-2 text-cocoa-soft lg:mt-4">
+              <span className="font-display text-[1.75rem] text-cocoa-soft">0{index + 1}</span>
+              <p className="micro flex items-center gap-2 whitespace-nowrap text-cocoa-soft lg:mt-4">
                 <span className="size-3 rounded-full" style={{ background: `rgb(${NOTE_TONES[index]})` }} aria-hidden="true" />
                 {note.position} note
               </p>
@@ -71,7 +71,7 @@ function Marker({ tone }: { tone: string }) {
   return (
     <span
       aria-hidden="true"
-      className="block size-[22px] rounded-full border-[3px] bg-white shadow-soft"
+      className="block size-[1.375rem] rounded-full border-[0.1875rem] bg-white shadow-soft"
       style={{ borderColor: `rgb(${tone})` }}
     />
   )
@@ -82,7 +82,7 @@ function PhoneTimeline({ marks, progress, trail }: { marks: readonly Mark[]; pro
     <div className="relative pl-14 lg:hidden">
       <motion.div
         aria-hidden="true"
-        className={`absolute top-2 bottom-2 left-[19px] w-1.5 origin-top rounded-full ${trail} [--dir:180deg]`}
+        className={`absolute top-2 bottom-2 left-[1.1875rem] w-1.5 origin-top rounded-full ${trail} [--dir:180deg]`}
         style={{ scaleY: progress }}
       />
       <motion.ol
@@ -94,11 +94,11 @@ function PhoneTimeline({ marks, progress, trail }: { marks: readonly Mark[]; pro
       >
         {marks.map((mark) => (
           <motion.li key={mark.hours} className="relative" variants={riseItem}>
-            <span className="absolute top-1 -left-[46px]">
+            <span className="absolute top-1 -left-[2.875rem]">
               <Marker tone={mark.tone} />
             </span>
             <p className="micro text-cocoa-soft">{mark.hours} h</p>
-            <p className="mt-1 font-display text-[22px]">{mark.text}</p>
+            <p className="mt-1 font-display text-[1.375rem]">{mark.text}</p>
           </motion.li>
         ))}
       </motion.ol>
@@ -108,7 +108,7 @@ function PhoneTimeline({ marks, progress, trail }: { marks: readonly Mark[]; pro
 
 function DesktopTimeline({ marks, progress, trail }: { marks: readonly Mark[]; progress: MotionValue<number> | number; trail: string }) {
   return (
-    <div className="relative hidden h-[220px] lg:block">
+    <div className="relative hidden h-[13.75rem] lg:block">
       <motion.div
         aria-hidden="true"
         className={`absolute top-1/2 right-0 left-0 h-2.5 -translate-y-1/2 origin-left rounded-full ${trail} [--dir:90deg]`}
@@ -132,7 +132,7 @@ function DesktopTimeline({ marks, progress, trail }: { marks: readonly Mark[]; p
                 className={`absolute w-max ${isUp ? 'bottom-10' : 'top-10'} ${isLast ? 'right-0 text-right' : 'left-0'}`}
               >
                 <p className="micro text-cocoa-soft">{mark.hours} h</p>
-                <p className="mt-1 font-display text-[24px]">{mark.text}</p>
+                <p className="mt-1 font-display text-[1.5rem]">{mark.text}</p>
               </Reveal>
             </li>
           )
@@ -152,7 +152,7 @@ export function Timeline({ product }: { product: Product }) {
   const trail = 'bg-[linear-gradient(var(--dir),rgb(240_182_107/0.95),rgb(233_154_154/0.7)_33%,rgb(190_110_92/0.45)_66%,rgb(190_110_92/0.08))]'
 
   return (
-    <section aria-labelledby="timeline-title" className="mx-auto max-w-[90rem] px-5 lg:px-20">
+    <section aria-labelledby="timeline-title" className="page-x">
       <SectionHeading id="timeline-title" eyebrow="Longevity & sillage" title={[{ text: 'A day' }, { text: 'with it', accent: true }]} />
       <div ref={ref} className="relative mt-12 lg:mt-16">
         <PhoneTimeline marks={marks} progress={progress} trail={trail} />

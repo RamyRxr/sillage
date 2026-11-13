@@ -87,7 +87,7 @@ function PaymentFields({ register, errors }: FieldsProps) {
   return (
     <fieldset className="space-y-4">
       <legend className="micro mb-4 text-cocoa-soft">Payment</legend>
-      <p className="rounded-[20px] bg-peach/40 px-5 py-4 text-sm">
+      <p className="rounded-[1.25rem] bg-peach/40 px-5 py-4 text-sm">
         This is a demo. Use the test card <strong>4242 4242 4242 4242</strong> with any future date. Nothing is charged, sent or stored.
       </p>
       <Field label="Card number" inputMode="numeric" autoComplete="off" placeholder="4242 4242 4242 4242" registration={register('cardNumber')} error={errors.cardNumber} />
@@ -112,33 +112,33 @@ function OrderSummary({ priced, isSubmitting }: { priced: readonly PricedLine[];
   const summary = summarize(priced)
   const label = isSubmitting ? 'Placing order…' : `Place order · ${formatPrice(summary.totalCents)}`
   return (
-    <aside aria-label="Your order" className="glass h-fit rounded-[32px] p-6 sm:p-8 lg:sticky lg:top-32 lg:rounded-[40px]">
+    <aside aria-label="Your order" className="glass h-fit rounded-[2rem] p-6 sm:p-8 lg:sticky lg:top-32 lg:rounded-[2.5rem]">
       <p className="micro text-cocoa-soft">Your order</p>
       <ul className="mt-5 space-y-4">
         {priced.map((line) => (
           <li key={line.key} className="flex items-center gap-4">
-            <span className="grid size-16 shrink-0 place-items-center rounded-[18px] border border-white bg-white/55">
+            <span className="grid size-16 shrink-0 place-items-center rounded-[1.125rem] border border-white bg-white/55">
               <Bottle tone={line.product.tone} className="w-7" />
             </span>
             <span className="flex-1">
-              <span className="block font-display text-[22px] leading-tight">{line.product.name}</span>
+              <span className="block font-display text-[1.375rem] leading-tight">{line.product.name}</span>
               <span className="micro text-cocoa-soft">
                 {line.size.label} · Qty {line.quantity}
               </span>
             </span>
-            <span className="font-display text-[22px]">{formatPrice(line.totalCents)}</span>
+            <span className="font-display text-[1.375rem]">{formatPrice(line.totalCents)}</span>
           </li>
         ))}
       </ul>
       <div className="hairline mt-6" />
-      <dl className="mt-5 space-y-3 text-[15px]">
+      <dl className="mt-5 space-y-3 text-[max(0.9375rem,11px)]">
         <SummaryRow label="Subtotal" value={formatPrice(summary.subtotalCents)} />
         <SummaryRow label="Delivery" value={summary.deliveryCents === 0 ? 'Free' : formatPrice(summary.deliveryCents)} />
       </dl>
       <div className="hairline mt-5" />
       <div className="mt-5 flex items-baseline justify-between">
         <span className="font-display text-2xl">Total</span>
-        <span className="font-display text-[46px] leading-none font-light">{formatPrice(summary.totalCents)}</span>
+        <span className="font-display text-[2.875rem] leading-none font-light">{formatPrice(summary.totalCents)}</span>
       </div>
       <Button type="submit" form="checkout-form" variant="gradient" size="lg" disabled={isSubmitting} className="mt-7 w-full">
         {isSubmitting && (
@@ -195,15 +195,15 @@ export function CheckoutPage() {
   }
 
   return (
-    <section aria-labelledby="checkout-title" className="relative mx-auto max-w-[90rem] px-5 pt-24 lg:px-20 lg:pt-36">
+    <section aria-labelledby="checkout-title" className="page-x relative pt-24 lg:pt-36">
       <title>Checkout — Sillage</title>
-      <Orb x="85%" y="12%" size="900px" tone="247 183 127" alpha={0.55} />
+      <Orb x="85%" y="12%" size="56.25rem" tone="247 183 127" alpha={0.55} />
       <div className="relative">
         <Steps />
         <h1 id="checkout-title" className="t-h1 mt-8">
           Check<span className="accent">out</span>
         </h1>
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_440px] lg:gap-16">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_27.5rem] lg:gap-16">
           {/* method="post" so that even a fallback native submit could never put card details in the URL. */}
           <form
             id="checkout-form"

@@ -11,8 +11,8 @@ import { BlobField } from '../components/ui/Decor'
 import { productRepository } from '../data/productRepository'
 import { cn } from '../lib/cn'
 
-// Desktop cards step down, like the design.
-const STEP = ['', 'lg:mt-12', 'lg:mt-24', 'lg:hidden']
+// Desktop cards step down, like the design: three in a row on smaller desktops, four from xl up.
+const STEP = ['', 'lg:mt-12 xl:mt-8', 'lg:mt-24 xl:mt-16', 'lg:hidden xl:mt-24 xl:block']
 
 export function HomePage() {
   const featured = productRepository.findAll().slice(0, 4)
@@ -23,10 +23,10 @@ export function HomePage() {
       <HomeHero />
       <Marquee />
 
-      <section id="collection" aria-labelledby="collection-title" className="relative mx-auto mt-24 max-w-[90rem] scroll-mt-28 px-5 lg:mt-36 lg:px-20">
+      <section id="collection" aria-labelledby="collection-title" className="page-x relative mt-24 scroll-mt-28 lg:mt-36">
         <BlobField
           viewBox="0 0 1440 900"
-          className="-inset-x-20 top-40 h-[900px] w-[calc(100%+10rem)]"
+          className="-inset-x-20 top-40 h-[56.25rem] w-[calc(100%+10rem)]"
           blobs={[
             { cx: 300, cy: 330, r: 260, wobble: 0.14, phase: 1.2, fill: '#F7C9A5', opacity: 0.45 },
             { cx: 1150, cy: 560, r: 300, wobble: 0.15, phase: 3.3, fill: '#E99A9A', opacity: 0.3 },
@@ -42,7 +42,7 @@ export function HomePage() {
             </ButtonLink>
           }
         />
-        <Stagger className="relative mt-10 grid grid-cols-2 gap-4 lg:mt-16 lg:grid-cols-3 lg:gap-[52px]">
+        <Stagger className="relative mt-10 product-grid lg:mt-16">
           {featured.map((product, index) => (
             <StaggerItem key={product.slug} className={cn(STEP[index])}>
               <ProductCard product={product} />

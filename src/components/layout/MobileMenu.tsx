@@ -19,13 +19,13 @@ function SignatureCard({ onClose, rise }: { onClose: () => void; rise: number })
   if (!signature || !size) return null
   return (
     <motion.div
-      className="panel-gradient relative mt-10 overflow-hidden rounded-[32px] p-6"
+      className="panel-gradient relative mt-10 overflow-hidden rounded-[2rem] p-6"
       initial={{ opacity: 0, y: rise }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...easeNormal, delay: motionTokens.delay.medium }}
     >
       <p className="micro">The signature</p>
-      <p className="mt-2 font-display text-[40px] leading-none font-light tracking-[-0.03em]">
+      <p className="mt-2 font-display text-[2.5rem] leading-none font-light tracking-[-0.03em]">
         Ombre <span className="accent">Claire</span>
       </p>
       <div className="mt-5 flex items-center justify-between">
@@ -56,7 +56,7 @@ function MenuLinks({ onClose, rise }: { onClose: () => void; rise: number }) {
               to={item.to}
               end={item.end}
               onClick={onClose}
-              className={({ isActive }) => cn('flex items-end justify-between py-4 t-h1 !text-[64px]', isActive && 'accent')}
+              className={({ isActive }) => cn('flex items-end justify-between py-4 t-h1 !text-[4rem]', isActive && 'accent')}
             >
               {item.label}
               <span className="micro mb-3 text-cocoa-soft not-italic">0{index + 1}</span>
@@ -91,11 +91,11 @@ function MenuPanel({ onClose, dialogRef }: { onClose: () => void; dialogRef: Ref
       exit={{ opacity: 0 }}
       transition={easeNormal}
     >
-      <Orb x="80%" y="25%" size="620px" tone="247 183 127" alpha={0.75} />
-      <Orb x="10%" y="90%" size="460px" tone="233 154 154" alpha={0.5} />
+      <Orb x="80%" y="25%" size="38.75rem" tone="247 183 127" alpha={0.75} />
+      <Orb x="10%" y="90%" size="28.75rem" tone="233 154 154" alpha={0.5} />
       <div className="relative flex min-h-full flex-col px-5 pt-4 pb-10">
         <div className="flex h-14 items-center justify-between">
-          <span className="text-[13px] font-extrabold tracking-[0.42em]">SILLAGE</span>
+          <span className="text-[max(0.8125rem,11px)] font-extrabold tracking-[0.42em]">SILLAGE</span>
           <button type="button" onClick={onClose} aria-label="Close menu" className="glass grid size-11 place-items-center rounded-full">
             <svg viewBox="0 0 24 24" className="size-5" aria-hidden="true">
               <path d="M7 7l10 10M17 7L7 17" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />

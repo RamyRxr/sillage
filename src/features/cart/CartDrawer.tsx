@@ -44,12 +44,12 @@ function DrawerLine({ line }: { line: PricedLine }) {
       transition={easeNormal}
       className="flex gap-4 border-b border-cocoa/10 py-5"
     >
-      <div className="grid size-20 shrink-0 place-items-center rounded-[20px] border border-white bg-white/60">
+      <div className="grid size-20 shrink-0 place-items-center rounded-[1.25rem] border border-white bg-white/60">
         <Bottle tone={line.product.tone} className="w-9" />
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
-          <Link to={`/shop/${line.slug}`} onClick={closeDrawer} className="font-display text-[22px] leading-tight hover:text-clay">
+          <Link to={`/shop/${line.slug}`} onClick={closeDrawer} className="font-display text-[1.375rem] leading-tight hover:text-clay">
             {line.product.name}
           </Link>
           <span className="font-display text-xl">{formatPrice(line.totalCents)}</span>
@@ -122,14 +122,14 @@ function DrawerPanel({ dialogRef }: { dialogRef: RefObject<HTMLElement | null> }
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
-        className="absolute inset-y-0 right-0 flex w-full max-w-[460px] flex-col bg-cream shadow-[-30px_0_80px_rgb(59_36_32/0.18)]"
+        className="absolute inset-y-0 right-0 flex w-full max-w-[28.75rem] flex-col bg-cream shadow-[-1.875rem_0_5rem_rgb(59_36_32/0.18)]"
         initial={{ x: reduce ? 0 : '100%', opacity: reduce ? 0 : 1 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: reduce ? 0 : '100%', opacity: reduce ? 0 : 1 }}
         transition={easeNormal}
       >
         <div className="flex items-center justify-between px-6 pt-6">
-          <h2 id="cart-title" className="font-display text-[34px] font-light tracking-[-0.02em]">
+          <h2 id="cart-title" className="font-display text-[2.125rem] font-light tracking-[-0.02em]">
             Your <span className="accent">cart</span>
           </h2>
           <button type="button" onClick={closeDrawer} aria-label="Close cart" className="glass grid size-11 place-items-center rounded-full">

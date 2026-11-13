@@ -17,14 +17,14 @@ const BLOBS: readonly BlobSpec[] = [
   { cx: 700, cy: 330, r: 200, wobble: 0.14, phase: 4.0, fill: '#F0B66B', opacity: 0.4 },
 ]
 const LEAD = ['A perfume is not a smell.', 'It is the space you leave behind.']
-const ARCH = 'rounded-t-full rounded-b-[36px]'
+const ARCH = 'rounded-t-full rounded-b-[2.25rem]'
 
 function CountBadge() {
   const count = productRepository.findAll().length
   return (
-    <div className="glass grid size-24 place-items-center rounded-full text-center lg:size-[156px]">
+    <div className="glass grid size-24 place-items-center rounded-full text-center lg:size-[9.75rem]">
       <div>
-        <CountUp to={count} className="block font-display text-[36px] leading-none font-light lg:text-[46px]" />
+        <CountUp to={count} className="block font-display text-[2.25rem] leading-none font-light lg:text-[2.875rem]" />
         <span className="micro mt-1 block text-cocoa-soft lg:mt-2">Perfumes</span>
       </div>
     </div>
@@ -33,15 +33,16 @@ function CountBadge() {
 
 function Bestsellers() {
   const items = productRepository.findAll().slice(0, 3)
+  // On desktop the card grows to fit the longest name: prices keep their 11px minimum there.
   return (
-    <div className="glass w-[300px] rounded-[32px] p-7">
+    <div className="glass w-[18.75rem] rounded-[2rem] p-7 lg:w-fit lg:min-w-[21rem]">
       <p className="micro text-cocoa-soft">Bestsellers</p>
       <ul className="mt-4">
         {items.map((product, index) => (
           <li key={product.slug} className={index > 0 ? 'border-t border-cocoa/10' : undefined}>
             <Link to={`/shop/${product.slug}`} className="group flex items-center gap-3 py-3">
               <span className="size-3 rounded-full" style={{ background: `rgb(${product.tone})` }} aria-hidden="true" />
-              <span className="flex-1 font-display text-[26px] leading-none transition-colors group-hover:text-clay">{product.name}</span>
+              <span className="flex-1 font-display text-[1.625rem] leading-none whitespace-nowrap transition-colors group-hover:text-clay lg:text-[1.5rem]">{product.name}</span>
               <span className="micro text-cocoa-soft">{formatPrice(product.sizes[1]?.priceCents ?? 0)}</span>
             </Link>
           </li>
@@ -55,7 +56,7 @@ function HeroArch({ y, reduce }: { y: MotionValue<number>; reduce: boolean }) {
   return (
     <motion.div
       style={{ y }}
-      className="relative mx-auto mt-10 w-[250px] [grid-area:arch] sm:w-[320px] lg:mt-0 lg:w-full lg:max-w-[420px] lg:self-center"
+      className="relative mx-auto mt-10 w-[15.625rem] [grid-area:arch] sm:w-[20rem] lg:mt-0 lg:w-full lg:max-w-[26.25rem] lg:self-center"
       initial={{ opacity: 0, scale: reduce ? 1 : 0.94 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ ...easeSlow, duration: motionTokens.duration.crawl, delay: 0.25 }}
@@ -125,12 +126,12 @@ export function HomeHero() {
 
   return (
     <section ref={ref} aria-labelledby="home-title" className="relative overflow-hidden pt-24 pb-10 lg:pt-28 lg:pb-16">
-      <Orb x="66%" y="48%" size="1060px" tone="247 183 127" alpha={0.9} />
-      <Orb x="10%" y="96%" size="780px" tone="233 154 154" alpha={0.55} delay={-4} />
-      <Orb x="21%" y="10%" size="560px" tone="255 226 184" alpha={0.85} delay={-8} />
+      <Orb x="66%" y="48%" size="66.25rem" tone="247 183 127" alpha={0.9} />
+      <Orb x="10%" y="96%" size="48.75rem" tone="233 154 154" alpha={0.55} delay={-4} />
+      <Orb x="21%" y="10%" size="35rem" tone="255 226 184" alpha={0.85} delay={-8} />
       <BlobField blobs={BLOBS} viewBox="0 0 1440 900" className="inset-0 h-full w-full" />
 
-      <div className="hero-grid relative mx-auto max-w-[90rem] px-5 lg:min-h-[760px] lg:px-20">
+      <div className="page-x hero-grid relative lg:min-h-[47.5rem]">
         <motion.div style={{ y: textY }} className="relative z-10 [grid-area:head]">
           <motion.p
             className="micro text-cocoa-soft"
