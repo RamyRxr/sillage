@@ -15,7 +15,7 @@ from store_common import (
     BUTTON_GRADIENT, PRODUCTS, RULE, SHADOW_WARM, Product,
     field, frame, option, rtxt, stepper, store_footer, store_header, write_pages,
 )
-from warm import COCOA, COCOA_SOFT, LEFT, box, glass, image_slot, orb, pill
+from warm import COCOA, COCOA_SOFT, LEFT, RIGHT, box, glass, image_slot, orb, pill
 
 PAGE_H = 1320
 SLUGS = ("cart", "checkout", "done")
@@ -30,10 +30,15 @@ CHECK_ICON = (
 )
 
 
-def _glow() -> str:
+# Every page takes the content edges; the defaults give the 1440 layout. The main column takes the width
+# the summary card leaves, and the summary card sits on the right edge.
+SUMMARY_W, SUMMARY_GAP = 440, 40
+
+
+def _glow(left: float = LEFT, right: float = RIGHT) -> str:
     return (
-        orb("Glow · sun", 1150, 260, 1000, "247,183,127", 0.6) + orb("Glow · blush", 120, 1000, 760, "233,154,154", 0.4)
-        + orb("Glow · gold", 360, 90, 520, "255,226,184", 0.75)
+        orb("Glow · sun", right - 210, 260, 1000, "247,183,127", 0.6) + orb("Glow · blush", left + 40, 1000, 760, "233,154,154", 0.4)
+        + orb("Glow · gold", left + 280, 90, 520, "255,226,184", 0.75)
     )
 
 
@@ -55,26 +60,26 @@ def _total(y: float) -> str:
 # --------------------------------------------------------------------------------------------
 # Cart
 # --------------------------------------------------------------------------------------------
-def _line_item(p: Product, y: float) -> str:
+def _line_item(p: Product, y: float, left: float = LEFT, width: float = 800) -> str:
     inner = (
         image_slot(f"{p.name} image slot", 20, 20, 138, 138, "24px", ("IMAGE", "EMPTY SLOT"))
         + txt(f"{p.name} name", 188, 30, "w-h3", p.name, COCOA)
         + txt(f"{p.name} details", 188, 88, "w-micro", f"{p.family.upper()} · 50 ML · EXTRAIT DE PARFUM", COCOA_SOFT)
         + stepper(188, 114, 1, 124, 44)
-        + rtxt(f"{p.name} price", 770, 38, "w-price-sm", p.price, COCOA, 120)
-        + rtxt(f"{p.name} remove", 770, 132, "w-micro", "REMOVE", COCOA_SOFT, 120)
+        + rtxt(f"{p.name} price", width - 30, 38, "w-price-sm", p.price, COCOA, 120)
+        + rtxt(f"{p.name} remove", width - 30, 132, "w-micro", "REMOVE", COCOA_SOFT, 120)
     )
-    return glass(f"Cart item: {p.name}", LEFT, y, 800, 180, 36, inner)
+    return glass(f"Cart item: {p.name}", left, y, width, 180, 36, inner)
 
 
-def _samples(y: float) -> str:
+def _samples(y: float, left: float = LEFT, width: float = 800) -> str:
     inner = txt("Samples title", 32, 30, "w-micro", "CHOOSE YOUR TWO FREE SAMPLES", COCOA_SOFT)
     for i, p in enumerate(PRODUCTS[2:]):
         inner += option(f"Sample: {p.name}", p.name, 32 + i * 186, 68, 170, i < 2)
-    return glass("Samples card", LEFT, y, 800, 160, 36, inner)
+    return glass("Samples card", left, y, width, 160, 36, inner)
 
 
-def _cart_summary() -> str:
+def _cart_summary(x: float = 920) -> str:
     inner = (
         txt("Summary title", 32, 32, "w-micro", "ORDER SUMMARY", COCOA_SOFT)
         + _summary_rows((("Subtotal", TOTAL), ("Delivery", "Free"), ("Samples", "2 included")), 72)
@@ -83,37 +88,39 @@ def _cart_summary() -> str:
         + txt("Tax note", 32, 388, "w-micro", "TAXES INCLUDED", COCOA_SOFT)
         + txt("Demo note", 32, 410, "w-micro", DEMO_NOTE, COCOA_SOFT)
     )
-    return glass("Order summary", 920, 400, 440, 460, 40, inner)
+    return glass("Order summary", x, 400, SUMMARY_W, 460, 40, inner)
 
 
-def cart_body() -> str:
-    items = "".join(_line_item(p, 400 + i * 200) for i, p in enumerate(ITEMS))
+def cart_body(left: float = LEFT, right: float = RIGHT) -> str:
+    list_w = right - left - SUMMARY_W - SUMMARY_GAP
+    items = "".join(_line_item(p, 400 + i * 200, left, list_w) for i, p in enumerate(ITEMS))
     return (
-        _glow() + eyebrow("Eyebrow", LEFT, 140, "YOUR SELECTION · 2 ITEMS")
-        + txt("Headline", LEFT, 176, "w-display-md", f'Your <span style="{ACCENT}">cart</span>', COCOA)
-        + items + _samples(820) + _cart_summary()
-        + txt("Continue link", LEFT, 1030, "w-micro", "←  CONTINUE SHOPPING", COCOA)
-        + store_footer(FOOTER_TOP) + store_header(-1)
+        _glow(left, right) + eyebrow("Eyebrow", left, 140, "YOUR SELECTION · 2 ITEMS")
+        + txt("Headline", left, 176, "w-display-md", f'Your <span style="{ACCENT}">cart</span>', COCOA)
+        + items + _samples(820, left, list_w) + _cart_summary(right - SUMMARY_W)
+        + txt("Continue link", left, 1030, "w-micro", "←  CONTINUE SHOPPING", COCOA)
+        + store_footer(FOOTER_TOP, left, right) + store_header(-1, left=left, right=right)
     )
 
 
 # --------------------------------------------------------------------------------------------
 # Checkout
 # --------------------------------------------------------------------------------------------
-def _form() -> str:
-    half, x2 = 372, LEFT + 388
+def _form(left: float = LEFT, width: float = 760) -> str:
+    half = (width - 16) / 2
+    x2 = left + half + 16
     return (
-        txt("Contact label", LEFT, 330, "w-micro", "CONTACT", COCOA_SOFT)
-        + field("Email", "claire@example.com", LEFT, 356, 760)
-        + txt("Delivery label", LEFT, 456, "w-micro", "DELIVERY", COCOA_SOFT)
-        + field("First name", "Claire", LEFT, 482, half) + field("Last name", "Martin", x2, 482, half)
-        + field("Address", "12 rue des Fleurs", LEFT, 562, 760)
-        + field("City", "Grasse", LEFT, 642, half) + field("Postcode", "06130", x2, 642, half)
-        + field("Country", "France", LEFT, 722, 760)
-        + txt("Payment label", LEFT, 822, "w-micro", "PAYMENT", COCOA_SOFT)
-        + field("Card number", "0000 0000 0000 0000", LEFT, 848, 760)
-        + field("Expiry", "MM / YY", LEFT, 928, half) + field("Security code", "CVC", x2, 928, half)
-        + txt("Form note", LEFT, 1024, "w-micro", "DEMO STORE · THIS FORM DOES NOT SEND OR STORE ANYTHING", COCOA_SOFT)
+        txt("Contact label", left, 330, "w-micro", "CONTACT", COCOA_SOFT)
+        + field("Email", "claire@example.com", left, 356, width)
+        + txt("Delivery label", left, 456, "w-micro", "DELIVERY", COCOA_SOFT)
+        + field("First name", "Claire", left, 482, half) + field("Last name", "Martin", x2, 482, half)
+        + field("Address", "12 rue des Fleurs", left, 562, width)
+        + field("City", "Grasse", left, 642, half) + field("Postcode", "06130", x2, 642, half)
+        + field("Country", "France", left, 722, width)
+        + txt("Payment label", left, 822, "w-micro", "PAYMENT", COCOA_SOFT)
+        + field("Card number", "0000 0000 0000 0000", left, 848, width)
+        + field("Expiry", "MM / YY", left, 928, half) + field("Security code", "CVC", x2, 928, half)
+        + txt("Form note", left, 1024, "w-micro", "DEMO STORE · THIS FORM DOES NOT SEND OR STORE ANYTHING", COCOA_SOFT)
     )
 
 
@@ -126,7 +133,7 @@ def _mini_item(p: Product, y: float) -> str:
     )
 
 
-def _checkout_summary() -> str:
+def _checkout_summary(x: float = 920) -> str:
     inner = (
         txt("Summary title", 32, 32, "w-micro", "YOUR ORDER", COCOA_SOFT)
         + "".join(_mini_item(p, 64 + i * 84) for i, p in enumerate(ITEMS))
@@ -136,26 +143,28 @@ def _checkout_summary() -> str:
         + pill("Primary button", f"Place order · {TOTAL}", 32, 442, 374, 60, BUTTON_GRADIENT, COCOA, SHADOW_WARM)
         + txt("Demo note", 32, 530, "w-micro", DEMO_NOTE, COCOA_SOFT)
     )
-    return glass("Order summary", 920, 330, 440, 580, 40, inner)
+    return glass("Order summary", x, 330, SUMMARY_W, 580, 40, inner)
 
 
-def checkout_body() -> str:
+def checkout_body(left: float = LEFT, right: float = RIGHT) -> str:
     steps = (
-        option("Step: Cart", "1 · Cart", LEFT, 136, 130, False, 44)
-        + option("Step: Details", "2 · Details and payment", LEFT + 146, 136, 250, True, 44)
-        + option("Step: Done", "3 · Done", LEFT + 412, 136, 130, False, 44)
+        option("Step: Cart", "1 · Cart", left, 136, 130, False, 44)
+        + option("Step: Details", "2 · Details and payment", left + 146, 136, 250, True, 44)
+        + option("Step: Done", "3 · Done", left + 412, 136, 130, False, 44)
     )
+    form_w = right - left - SUMMARY_W - 2 * SUMMARY_GAP
     return (
-        _glow() + steps + txt("Headline", LEFT, 212, "w-h2", f'Check<span style="{ACCENT}">out</span>', COCOA)
-        + _form() + _checkout_summary() + store_footer(FOOTER_TOP) + store_header(-1)
+        _glow(left, right) + steps + txt("Headline", left, 212, "w-h2", f'Check<span style="{ACCENT}">out</span>', COCOA)
+        + _form(left, form_w) + _checkout_summary(right - SUMMARY_W)
+        + store_footer(FOOTER_TOP, left, right) + store_header(-1, left=left, right=right)
     )
 
 
 # --------------------------------------------------------------------------------------------
 # Order confirmed
 # --------------------------------------------------------------------------------------------
-def done_body() -> str:
-    cx = FRAME_W / 2
+def done_body(left: float = LEFT, right: float = RIGHT, frame_w: float = FRAME_W) -> str:
+    cx = frame_w / 2
     card = (
         txt("Summary title", 32, 32, "w-micro", "ORDER SL-0001", COCOA_SOFT)
         + "".join(
@@ -167,8 +176,8 @@ def done_body() -> str:
     )
     lead = "Your order is on its way from Grasse.<br>A confirmation was sent to claire@example.com."
     return (
-        orb("Glow · sun", cx, 420, 1200, "247,183,127", 0.7) + orb("Glow · blush", 200, 1000, 760, "233,154,154", 0.4)
-        + orb("Glow · gold", 1200, 120, 560, "255,226,184", 0.8)
+        orb("Glow · sun", cx, 420, 1200, "247,183,127", 0.7) + orb("Glow · blush", left + 120, 1000, 760, "233,154,154", 0.4)
+        + orb("Glow · gold", right - 160, 120, 560, "255,226,184", 0.8)
         + glass("Check badge", cx - 48, 170, 96, 96, 48, CHECK_ICON)
         + txt("Eyebrow", cx - 300, 300, "w-micro", "ORDER CONFIRMED", COCOA_SOFT, 600, "center")
         + txt("Headline", cx - 500, 330, "w-display-md", f'Thank <span style="{ACCENT}">you</span>', COCOA, 1000, "center")
@@ -176,7 +185,7 @@ def done_body() -> str:
         + glass("Order card", cx - 300, 620, 600, 260, 40, card)
         + pill("Primary button", "Continue shopping", cx - 140, 930, 280, 60, BUTTON_GRADIENT, COCOA, SHADOW_WARM)
         + txt("Demo note", cx - 300, 1024, "w-micro", "DEMO STORE · NO ORDER WAS PLACED", COCOA_SOFT, 600, "center")
-        + store_footer(FOOTER_TOP) + store_header(-1, cart_count=0)
+        + store_footer(FOOTER_TOP, left, right) + store_header(-1, cart_count=0, left=left, right=right)
     )
 
 

@@ -93,7 +93,7 @@ def field(label: str, value: str, x: float, y: float, w: float) -> str:
 # --------------------------------------------------------------------------------------------
 # Header, footer, shared sections
 # --------------------------------------------------------------------------------------------
-def nav_bar(current: int) -> str:
+def nav_bar(current: int, frame_w: float = FRAME_W) -> str:
     w, h = 420, 52
     cell = (w - 12) / len(NAV)
     inner = ""
@@ -105,45 +105,49 @@ def nav_bar(current: int) -> str:
             f"color:{COCOA if active else COCOA_SOFT};{lifted}"
         )
         inner += box(f"Nav item: {item}", 6 + i * cell, 6, cell, h - 12, style, f'<span class="w-nav">{item}</span>')
-    return glass("Navigation", (FRAME_W - w) / 2, 28, w, h, h / 2, inner)
+    return glass("Navigation", (frame_w - w) / 2, 28, w, h, h / 2, inner)
 
 
-def store_header(current: int, cart_count: int = 2) -> str:
+# The left/right edges default to the 1440 layout; wider layouts pass their own content edges.
+def store_header(current: int, cart_count: int = 2, left: float = LEFT, right: float = RIGHT) -> str:
     """Wordmark, nav, search and cart. Pass current=-1 when no nav item is active."""
-    search = glass("Search button", RIGHT - 214, 30, 48, 48, 24, SEARCH_ICON)
-    cart = pill("Cart button", f"Cart · {cart_count}", RIGHT - 150, 30, 150, 48, "transparent", COCOA, OUTLINE)
-    return txt("Wordmark", LEFT, 46, "w-wordmark", COPY.house, COCOA) + nav_bar(current) + search + cart
+    search = glass("Search button", right - 214, 30, 48, 48, 24, SEARCH_ICON)
+    cart = pill("Cart button", f"Cart · {cart_count}", right - 150, 30, 150, 48, "transparent", COCOA, OUTLINE)
+    return txt("Wordmark", left, 46, "w-wordmark", COPY.house, COCOA) + nav_bar(current, left + right) + search + cart
 
 
-def store_footer(top: int) -> str:
-    links = "".join(txt(f"Footer link: {name}", x, top + 52, "w-nav", esc(name), COCOA_SOFT) for name, x in FOOTER_LINKS)
+def store_footer(top: int, left: float = LEFT, right: float = RIGHT) -> str:
+    shift = (left + right - FRAME_W) / 2  # keeps the link group centred
+    links = "".join(txt(f"Footer link: {name}", x + shift, top + 52, "w-nav", esc(name), COCOA_SOFT) for name, x in FOOTER_LINKS)
     return (
-        box("Footer rule", LEFT, top, CONTENT_W, 1, RULE)
-        + txt("Wordmark", LEFT, top + 54, "w-wordmark", COPY.house, COCOA)
+        box("Footer rule", left, top, right - left, 1, RULE)
+        + txt("Wordmark", left, top + 54, "w-wordmark", COPY.house, COCOA)
         + links
-        + rtxt("Origin", RIGHT, top + 54, "w-micro", COPY.origin.upper(), COCOA_SOFT, 300)
+        + rtxt("Origin", right, top + 54, "w-micro", COPY.origin.upper(), COCOA_SOFT, 300)
     )
 
 
-def services_strip(top: int) -> str:
-    inner, col = "", CONTENT_W / len(SERVICES)
+def services_strip(top: int, left: float = LEFT, right: float = RIGHT) -> str:
+    width = right - left
+    inner, col = "", width / len(SERVICES)
     for i, (title, note) in enumerate(SERVICES):
         if i:
             inner += box("Divider", i * col, 32, 1, 86, "background:rgba(59,36,32,0.14);")
         inner += txt(f"Service: {title}", i * col + 36, 46, "w-time", title, COCOA)
         inner += txt(f"Service note: {title}", i * col + 36, 90, "w-micro", note, COCOA_SOFT)
-    return glass("Services strip", LEFT, top, CONTENT_W, 150, 40, inner)
+    return glass("Services strip", left, top, width, 150, 40, inner)
 
 
-def band(top: int, heading: str, note: str, button: str) -> str:
+def band(top: int, heading: str, note: str, button: str, left: float = LEFT, right: float = RIGHT) -> str:
     """Closing call-to-action panel."""
+    width = right - left
     inner = (
-        orb("Band glow", 1000, 140, 760, "255,246,232", 0.9)
+        orb("Band glow", width - 280, 140, 760, "255,246,232", 0.9)
         + txt("Band headline", 64, 60, "w-h2", heading, COCOA)
         + txt("Band note", 64, 180, "w-micro", note, COCOA)
-        + pill("Primary button", button, CONTENT_W - 64 - 292, 110, 292, 60, COCOA, CREAM, SHADOW_DARK)
+        + pill("Primary button", button, width - 64 - 292, 110, 292, 60, COCOA, CREAM, SHADOW_DARK)
     )
-    return box("Call to action band", LEFT, top, CONTENT_W, 280, f"border-radius:56px;overflow:hidden;background:{PANEL_GRADIENT};", inner)
+    return box("Call to action band", left, top, width, 280, f"border-radius:56px;overflow:hidden;background:{PANEL_GRADIENT};", inner)
 
 
 def product_card(p: Product, x: float, y: float) -> str:

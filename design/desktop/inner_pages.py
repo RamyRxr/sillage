@@ -18,7 +18,7 @@ from halo_page import (
     ACCENT, CONTENT_W, ECHO_STEPS, EXTRA_CSS, NOTE_COLORS, NOTE_RGB, chip, echo_rects, eyebrow, footer, svg_at, wrap,
 )
 from warm import (
-    AMBER, BASE_CSS, CLAY, COCOA, COCOA_SOFT, CREAM, FONTS_URL, LEFT, PEACH, ROSE,
+    AMBER, BASE_CSS, CLAY, COCOA, COCOA_SOFT, CREAM, FONTS_URL, LEFT, PEACH, RIGHT, ROSE,
     arch_path, blob, box, dot, glass, halo_header, image_slot, orb, pill,
 )
 
@@ -102,24 +102,26 @@ def _fragrance_hero() -> str:
     )
 
 
-def _note_row(i: int, y: float) -> str:
+# Sections shared with the store pages take the content edges; the defaults give the 1440 layout.
+def _note_row(i: int, y: float, left: float = LEFT, right: float = RIGHT) -> str:
     index, name, position = COPY.notes[i]
     return (
-        box("Row rule", LEFT, y, CONTENT_W, 1, RULE)
-        + orb(f"{name} glow", 1090, y + 130, 720, NOTE_RGB[i], 0.45)
-        + image_slot(f"{name} texture slot", 820, y + 30, 540, 200, "100px", ("MACRO TEXTURE", f"{name.upper()} · EMPTY SLOT"))
-        + txt(f"{name} number", LEFT, y + 44, "w-num", index, COCOA_SOFT)
-        + txt(f"{name} position", LEFT, y + 90, "w-micro", f"{position} NOTE", COCOA_SOFT)
-        + dot(LEFT, y + 120, NOTE_COLORS[i])
-        + txt(f"{name} name", LEFT + 120, y + 30, "w-note-xl", name, COCOA)
-        + txt(f"{name} line", LEFT + 120, y + 150, "w-lead2", COPY.note_copy[i], COCOA)
-        + txt(f"{name} detail", LEFT + 120, y + 190, "w-body-sm", NOTE_DETAIL[i], COCOA_SOFT)
+        box("Row rule", left, y, right - left, 1, RULE)
+        + orb(f"{name} glow", right - 270, y + 130, 720, NOTE_RGB[i], 0.45)
+        + image_slot(f"{name} texture slot", right - 540, y + 30, 540, 200, "100px", ("MACRO TEXTURE", f"{name.upper()} · EMPTY SLOT"))
+        + txt(f"{name} number", left, y + 44, "w-num", index, COCOA_SOFT)
+        + txt(f"{name} position", left, y + 90, "w-micro", f"{position} NOTE", COCOA_SOFT)
+        + dot(left, y + 120, NOTE_COLORS[i])
+        + txt(f"{name} name", left + 120, y + 30, "w-note-xl", name, COCOA)
+        + txt(f"{name} line", left + 120, y + 150, "w-lead2", COPY.note_copy[i], COCOA)
+        + txt(f"{name} detail", left + 120, y + 190, "w-body-sm", NOTE_DETAIL[i], COCOA_SOFT)
     )
 
 
-def notes_section(top: int = 840) -> str:
-    rows = "".join(_note_row(i, top + 60 + i * 290) for i in range(3))
-    return eyebrow("Notes eyebrow", LEFT, top, "NOTES IN DEPTH") + rows + box("Section end rule", LEFT, top + 900, CONTENT_W, 1, RULE)
+def notes_section(top: int = 840, left: float = LEFT, right: float = RIGHT) -> str:
+    rows = "".join(_note_row(i, top + 60 + i * 290, left, right) for i in range(3))
+    end = box("Section end rule", left, top + 900, right - left, 1, RULE)
+    return eyebrow("Notes eyebrow", left, top, "NOTES IN DEPTH") + rows + end
 
 
 def _mark(x: float, y: float, hours: str, text: str, up: bool, color: str, last: bool) -> str:
@@ -131,29 +133,30 @@ def _mark(x: float, y: float, hours: str, text: str, up: bool, color: str, last:
     return marker + tick + label + txt(f"{hours} hours", tx, micro_y, "w-micro", hours, COCOA_SOFT, width, align)
 
 
-def timeline(top: int = 1840, table: bool = True) -> str:
-    y = top + 290
+def timeline(top: int = 1840, table: bool = True, left: float = LEFT, right: float = RIGHT) -> str:
+    y, width = top + 290, right - left
     bar = (
         "border-radius:5px;background:linear-gradient(90deg,rgba(240,182,107,0.95) 0%,"
         "rgba(233,154,154,0.7) 33%,rgba(190,110,92,0.45) 66%,rgba(190,110,92,0) 100%);"
     )
-    trail = box("Trail", LEFT, y - 5, CONTENT_W, 10, bar) + box("Timeline rule", LEFT, y, CONTENT_W, 1, "background:rgba(59,36,32,0.3);")
+    trail = box("Trail", left, y - 5, width, 10, bar) + box("Timeline rule", left, y, width, 1, "background:rgba(59,36,32,0.3);")
     marks = "".join(
-        _mark(LEFT + hours / 24 * CONTENT_W, y, label, text, up, color, hours == 24)
+        _mark(left + hours / 24 * width, y, label, text, up, color, hours == 24)
         for hours, label, text, up, color in TIMELINE
     )
-    heading = txt("Timeline heading", LEFT, top + 36, "w-h2", f'A day <span style="{ACCENT}">with it</span>', COCOA)
-    return eyebrow("Timeline eyebrow", LEFT, top, "LONGEVITY & SILLAGE") + heading + trail + marks + (_phase_table(top + 470) if table else "")
+    heading = txt("Timeline heading", left, top + 36, "w-h2", f'A day <span style="{ACCENT}">with it</span>', COCOA)
+    table_html = _phase_table(top + 470, left, right) if table else ""
+    return eyebrow("Timeline eyebrow", left, top, "LONGEVITY & SILLAGE") + heading + trail + marks + table_html
 
 
-def _phase_table(top: float) -> str:
-    cols = (LEFT, LEFT + 300, LEFT + 560)
+def _phase_table(top: float, left: float = LEFT, right: float = RIGHT) -> str:
+    cols, width = (left, left + 300, left + 560), right - left
     out = "".join(txt(f"Table head {t.title()}", x, top, "w-micro", t, COCOA_SOFT) for t, x in zip(("PHASE", "HOURS", "WHAT YOU NOTICE"), cols))
     for i, (phase, hours, notice) in enumerate(PHASES):
         y = top + 36 + i * 68
-        out += box("Row rule", LEFT, y, CONTENT_W, 1, RULE) + txt(f"{phase} phase", cols[0], y + 20, "w-time", phase, COCOA)
+        out += box("Row rule", left, y, width, 1, RULE) + txt(f"{phase} phase", cols[0], y + 20, "w-time", phase, COCOA)
         out += txt(f"{phase} hours", cols[1], y + 20, "w-body", hours, COCOA_SOFT) + txt(f"{phase} notice", cols[2], y + 20, "w-body", notice, COCOA)
-    return out + box("Table end rule", LEFT, top + 36 + 3 * 68, CONTENT_W, 1, RULE)
+    return out + box("Table end rule", left, top + 36 + 3 * 68, width, 1, RULE)
 
 
 def _ingredients() -> str:
@@ -179,48 +182,50 @@ def fragrance_body() -> str:
 # --------------------------------------------------------------------------------------------
 # Maison
 # --------------------------------------------------------------------------------------------
-def maison_hero() -> str:
-    sx, sy, sw, sh, m = 980, 150, 340, 520, 90
-    shapes = blob(520, 430, 300, 0.13, 1.6, PEACH, 0.5) + blob(1180, 560, 230, 0.15, 3.4, ROSE, 0.3)
+def maison_hero(left: float = LEFT, right: float = RIGHT, frame_w: float = FRAME_W) -> str:
+    sx, sy, sw, sh, m = right - 380, 150, 340, 520, 90
+    shapes = blob(left + 440, 430, 300, 0.13, 1.6, PEACH, 0.5) + blob(right - 180, 560, 230, 0.15, 3.4, ROSE, 0.3)
     rings = svg_at("Echo outlines", sx - m, sy - m, sw + 2 * m, sh + 2 * m, echo_rects(sw, sh, m, sw / 2, ECHO_STEPS))
     slot = image_slot("Atelier image slot", sx, sy, sw, sh, f"{sw // 2}px", ("ATELIER IMAGE", "EMPTY SLOT · PORTRAIT"))
-    meta = box("Meta rule", LEFT, 610, 360, 1, RULE) + txt("Meta", LEFT, 634, "w-micro", "EST. 2024 · GRASSE, FRANCE", COCOA_SOFT)
+    meta = box("Meta rule", left, 610, 360, 1, RULE) + txt("Meta", left, 634, "w-micro", "EST. 2024 · GRASSE, FRANCE", COCOA_SOFT)
     return (
-        hero_glow((440, 420), (1300, 780), (1180, 90)) + svg_at("Liquid shapes", 0, 0, FRAME_W, 820, shapes)
-        + rings + slot + eyebrow("Eyebrow", LEFT, 150, "THE HOUSE")
-        + txt("Pull quote", LEFT, 190, "w-quote-xl", wrap(COPY.quote, 22), COCOA) + meta
+        hero_glow((left + 360, 420), (right - 60, 780), (right - 180, 90)) + svg_at("Liquid shapes", 0, 0, frame_w, 820, shapes)
+        + rings + slot + eyebrow("Eyebrow", left, 150, "THE HOUSE")
+        + txt("Pull quote", left, 190, "w-quote-xl", wrap(COPY.quote, 22), COCOA) + meta
     )
 
 
-def paragraphs(texts: tuple[str, ...] = PARAGRAPHS) -> str:
-    top = 920
-    out = orb("Glow · amber", 200, top + 500, 800, "247,183,127", 0.35) + eyebrow("Paragraphs eyebrow", LEFT, top, "ABOUT THE HOUSE")
+def paragraphs(texts: tuple[str, ...] = PARAGRAPHS, left: float = LEFT, right: float = RIGHT) -> str:
+    top, gap = 920, 52
+    col_w = (right - left - 2 * gap) / 3
+    out = orb("Glow · amber", left + 120, top + 500, 800, "247,183,127", 0.35) + eyebrow("Paragraphs eyebrow", left, top, "ABOUT THE HOUSE")
     for i, text in enumerate(texts):
-        x, y = LEFT + i * 444, top + 60 + i * 48
-        out += box("Column rule", x, y, 392, 1, RULE)
+        x, y = left + i * (col_w + gap), top + 60 + i * 48
+        out += box("Column rule", x, y, col_w, 1, RULE)
         out += txt(f"Paragraph {i + 1} number", x, y + 28, "w-numeral", f"0{i + 1}", NOTE_COLORS[i])
         out += txt(f"Paragraph {i + 1}", x, y + 190, "w-body", wrap(text, 38), COCOA)
     return out
 
 
-def numbers(items: tuple[tuple[str, str], ...] = NUMBERS) -> str:
-    top, col = 1700, CONTENT_W / 3
-    inner = orb("Panel glow", 640, 100, 900, "255,226,184", 0.7) + orb("Panel blush", 1180, 340, 700, "233,154,154", 0.4)
+def numbers(items: tuple[tuple[str, str], ...] = NUMBERS, left: float = LEFT, right: float = RIGHT) -> str:
+    top, width = 1700, right - left
+    col = width / 3
+    inner = orb("Panel glow", width / 2, 100, 900, "255,226,184", 0.7) + orb("Panel blush", width - 100, 340, 700, "233,154,154", 0.4)
     for i, (value, label) in enumerate(items):
         if i:
             inner += box("Divider", i * col, 60, 1, 280, "background:rgba(59,36,32,0.14);")
         inner += txt(f"{label.title()} number", i * col + 48, 80, "w-big", value, COCOA)
         inner += txt(f"{label.title()} label", i * col + 48, 290, "w-micro", label, COCOA_SOFT)
-    return glass("Numbers panel", LEFT, top, CONTENT_W, 400, 56, inner)
+    return glass("Numbers panel", left, top, width, 400, 56, inner)
 
 
-def atelier() -> str:
+def atelier(left: float = LEFT, right: float = RIGHT) -> str:
     top, height = 2220, 820
     return (
-        orb("Glow · rose", 720, top + height / 2, 1500, "233,154,154", 0.3)
-        + eyebrow("Atelier eyebrow", LEFT, top - 40, "THE ATELIER")
-        + image_slot("Atelier wide image slot", LEFT, top, CONTENT_W, height, "56px", ("ATELIER IMAGE", "EMPTY SLOT · WIDE"))
-        + chip("One atelier · Grasse, France", LEFT + 40, top + height - 92, 330)
+        orb("Glow · rose", (left + right) / 2, top + height / 2, 1500, "233,154,154", 0.3)
+        + eyebrow("Atelier eyebrow", left, top - 40, "THE ATELIER")
+        + image_slot("Atelier wide image slot", left, top, right - left, height, "56px", ("ATELIER IMAGE", "EMPTY SLOT · WIDE"))
+        + chip("One atelier · Grasse, France", left + 40, top + height - 92, 330)
     )
 
 
